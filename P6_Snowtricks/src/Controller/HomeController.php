@@ -10,10 +10,11 @@ use App\Entity\Trick;
 class HomeController extends AbstractController
 {
     /**
+     * Display home page of the website
      * @Route("/home", name="home")
      * @Route("/")
      */
-    public function index(): Response
+    public function home(): Response
     {
         $repository= $this-> getDoctrine()->getRepository(Trick::class);
         $tricks= $repository->findAll();
@@ -23,5 +24,4 @@ class HomeController extends AbstractController
         ]);
     }
 
-    
 }
