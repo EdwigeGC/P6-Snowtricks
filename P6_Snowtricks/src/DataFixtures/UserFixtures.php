@@ -13,7 +13,7 @@ class UserFixtures extends Fixture
         for ($i = 1; $i <= 3; $i++) {
             $user= new User();
             $user   ->setLastName("User n°$i")
-                    ->setLogin("Login n°$i")
+                    ->setUsername("Username n°$i")
                     ->setEmail("email$i@mail.fr")
                     ->setPassword("User$i");
 

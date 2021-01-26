@@ -6,13 +6,25 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @UniqueEntity(
+ *      fields={"email"},
+ *      message="Email address already used for another account."
+ * )
+ * @UniqueEntity(
+ *      fields={"username"},
+ *      message="Username not available. Choose another one"
+ * )
  */
-class User
+class User implements UserInterface
 {
     /**
+     * @var int
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -20,22 +32,32 @@ class User
     private $id;
 
     /**
+     * @var string|null
      * @ORM\Column(type="string", length=45, nullable=true)
+     * @Assert\Length(min=2, max=100)
      */
     private $lastName;
 
     /**
+      * @var string|null
      * @ORM\Column(type="string", length=45, nullable=true)
+     * @Assert\Length(min=2, max=100)
      */
     private $firstName;
 
     /**
+     * @var string
      * @ORM\Column(type="string", length=45)
+     * @Assert\NotBlank(message="Merci de remplir ce champs")
+     * @Assert\Length(min=2, max=25)
      */
-    private $login;
+    private $username;
 
     /**
+     * @var string
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Merci de remplir ce champs")
+     * @Assert\Email()
      */
     private $email;
 
@@ -45,9 +67,16 @@ class User
     private $password;
 
     /**
+     * @var string
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $photo;
+
+    /**
+    * @var bool
+     * @ORM\Column(type="boolean", length=255)
+     */
+    private $validated;
 
     /**
      * @ORM\OneToMany(targetEntity=Trick::class, mappedBy="user")
@@ -58,6 +87,13 @@ class User
      * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="user", orphanRemoval=true)
      */
     private $comments;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", unique=true, nullable=true)
+     */
+    private $apiToken;
+
 
     public function __construct()
     {
@@ -94,14 +130,18 @@ class User
         return $this;
     }
 
-    public function getLogin(): ?string
-    {
-        return $this->login;
+    /**
+     * Returns the username used to authenticate the user.
+     *
+     * @return string The username
+     */
+    public function getUsername(){
+        return $this->username;
     }
 
-    public function setLogin(string $login): self
+    public function setUsername(string $username): self
     {
-        $this->login = $login;
+        $this->username = $username;
 
         return $this;
     }
@@ -138,6 +178,18 @@ class User
     public function setPhoto(?string $photo): self
     {
         $this->photo = $photo;
+
+        return $this;
+    }
+
+    public function getValidated(): ?bool
+    {
+        return $this->validated;
+    }
+
+    public function setValidated(?bool $validated): self
+    {
+        $this->validated = $validated;
 
         return $this;
     }
@@ -201,4 +253,56 @@ class User
 
         return $this;
     }
+
+    /**
+     * Returns the roles granted to the user.
+     *
+     *     public function getRoles()
+     *     {
+     *         return ['ROLE_USER'];
+     *     }
+     *
+     * Alternatively, the roles might be stored on a ``roles`` property,
+     * and populated in any number of different ways when the user object
+     * is created.
+     *
+     * @return string[] The user roles
+     */
+    public function getRoles(){
+
+    }
+
+    /**
+     * Returns the salt that was originally used to encode the password.
+     *
+     * This can return null if the password was not encoded using a salt.
+     *
+     * @return string|null The salt
+     */
+    public function getSalt(){
+
+    }
+
+    /**
+     * Removes sensitive data from the user.
+     *
+     * This is important if, at any given point, sensitive information like
+     * the plain-text password is stored on this object.
+     */
+    public function eraseCredentials(){
+    }
+
+    public function getApiToken(): ?string{
+        return $this->apiToken;
+    }
+
+    public function setApiToken(?string $apiToken): self
+    {
+        $this->apiToken = $apiToken;
+
+        return $this;
+    }
+
+   
 }
+
