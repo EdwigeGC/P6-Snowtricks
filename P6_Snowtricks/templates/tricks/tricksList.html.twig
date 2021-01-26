@@ -1,17 +1,18 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Snowtricks{% endblock %}
+
 {% block body %}
 <section class="py-5 text-center container">
   <div class="row py-lg-5">
     <div class="col-lg-6 col-md-8 mx-auto">
       <h1 class="fw-light">Snowtricks</h1>
-      <p class="lead">Le site communautaire des figures de Snowboard</p>
+      <p class="lead">Join community of Snowtricks</p>
     </div>
   </div>
 </section>
 
 <div class="album py-5 bg-light">
-  <div class="container">
 
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
       {% for trick in tricks %}
