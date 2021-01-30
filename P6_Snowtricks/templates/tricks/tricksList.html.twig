@@ -23,8 +23,10 @@
 
             <div class="card-body">
               <h2><a href="/tricks/details/{{ trick.id }}">{{ trick.name }}</h2>
-              <a href="/tricks/details/{{ trick.id }}/edit"><i class="fas fa-pencil-alt"></i></a> 
-              <a href="/tricks/details/{{ trick.id }}/delete"><i class="fas fa-trash-alt"></i></a> 
+                {% if app.user %}
+                  <a href="/tricks/details/{{ trick.id }}/edit"><i class="fas fa-pencil-alt"></i></a> 
+                  <a href="/tricks/details/{{ trick.id }}/delete"><i class="fas fa-trash-alt"></i></a>
+                {% endif %} 
             </div>
           </div>
         </div>

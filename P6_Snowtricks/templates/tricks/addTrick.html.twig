@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Add trick{% endblock %}
+{% form_theme form _self %}
+
+{% block body %}
+<div class="container">
+<h1 class="h3 mb-3 fw-normal">Add new snowboard trick</h1>
+
+    {{ form_start(form) }}
+
+    {{ form_widget(form) }}
+
+    <button class="btn btn-primary" type="submit">Let's go</button>
+    
+    {{ form_end(form) }}
+</div>
+{% endblock %}
+
+{% block _add_trick_pictures_widget %}
+    <p>(add at least one picture)</p>
+
+    {{ form_widget(form) }}
+
+    <div class="form-group">
+        <button type="button" id="add-picture" class="btn btn-primary">Add another picture</button>
+    </div>
+{% endblock %}
+
+{% block _add_trick_pictures_entry_row %}
+   {{ form_widget(form) }}
+{% endblock %}
+
+{% block _add_trick_pictures_entry_widget %}
+    <div class="form-group">
+        <div class="row">
+            <div class="col">
+                {{ form_widget(form.title) }}
+            </div>
+            <div class="col">
+                {{ form_widget(form.file) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+
+<script>
+    $('#add-picture').click(function(){
+        const index=$('#add_trick_pictures div.form-group').length;
+        const tmpl= $('#add_trick_pictures').data('prototype').replace(/__name__/g, index);
+        $('add_trick_pictures').append(tmpl);
+
+    })
+</script>
+{% endblock %}

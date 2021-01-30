@@ -73,8 +73,8 @@ class UserController extends AbstractController
     * Validates registration with email confirmation
     *
     * @param UserRepository $repository
-    * @param [type] $username
-    * @param [type] $token
+    * @param string $username
+    * @param string $token
     * @return Response
     *
     * @Route("/check-registration/{username}/{token}", name="check_registration")

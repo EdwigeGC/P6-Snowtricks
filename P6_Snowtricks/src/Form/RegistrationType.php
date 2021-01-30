@@ -27,9 +27,9 @@ class RegistrationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('username',TextType::class, $this->setConfigurationAttribute("Votre pseudo"))
-            ->add('email',EmailType::class, $this->setConfigurationAttribute("Votre adresse E-mail"))
-            ->add('password',PasswordType::class, $this->setConfigurationAttribute("Votre mot de passe"))
+            ->add('username',TextType::class, $this->setConfigurationAttribute("Choose a username"))
+            ->add('email',EmailType::class, $this->setConfigurationAttribute("Write your Email address"))
+            ->add('password',PasswordType::class, $this->setConfigurationAttribute("Choose a password"))
         ;
     }
 
