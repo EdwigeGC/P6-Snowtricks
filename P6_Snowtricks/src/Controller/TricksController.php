@@ -11,7 +11,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
+use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ObjectManager;
 
 class TricksController extends AbstractController
 {
@@ -80,6 +81,27 @@ class TricksController extends AbstractController
             'form'=> $form->createView(),
         ]);
        
+    }
+
+    /**
+     * Delete a trick from the database
+     * 
+     * @Route("/trick/delete/{id}", name="delete_trick")
+     * 
+     * @param Trick $trick 
+     * @return Response
+     */
+    public function delete(Trick $trick){
+        $manager = $this->getDoctrine()->getManager();
+        $manager->remove($trick);
+        $manager->flush();
+
+        $this->addFlash(
+            'success',
+            "Success: the trick is deleted."
+        );
+
+        return $this->redirectToRoute('home');
     }
 
 }
