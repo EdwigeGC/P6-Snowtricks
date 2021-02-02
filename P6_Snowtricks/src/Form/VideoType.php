@@ -2,31 +2,33 @@
 
 namespace App\Form;
 
-use App\Entity\Picture;
+use App\Entity\Video;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class PictureType extends AbstractType
+class VideoType extends AbstractType
 {
-  
+    public function setConfigurationAttribute($label){
+        return[
+            'label'=>$label,
+            ];
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
         $builder
-            ->add('title', TextType::class, [
+            ->add('title',TextType::class, [
                 'attr' =>[
-                    'placeholder'=>"Choose a title for your picture",
-                    'required' =>true,
+                    'placeholder'=>"Write a little description of the video"
                 ]
             ])
-            ->add('file', FileType::class, [
-                'multiple' => false,
-                'required' =>true,
+            ->add('url', UrlType::class, [
+                'attr' =>[
+                    'placeholder'=>"URL of the video"
+                ]
             ])
         ;
     }
@@ -34,7 +36,7 @@ class PictureType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Picture::class,
+            'data_class' => Video::class,
         ]);
     }
 }

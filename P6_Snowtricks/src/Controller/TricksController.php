@@ -38,38 +38,33 @@ class TricksController extends AbstractController
      */
     public function create(Request $request){
         $trick= new Trick();
-
-        $img = new Picture();
-        $img->setTitle('img1');
-        $trick->getPictures()->add($img);
-       
+        
         $form=$this->createForm(AddTrickType::class, $trick);
-       
+
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()){
 
             $trick  ->setCreationDate(new \Datetime)
                     ->setUser($this->getUser());
-            //get the picture from the file
-            $pictures= $trick->getPictures()->getFile();
-dump($pictures);die;
-            foreach ($pictures as $picture) {
+
+            foreach ($trick->getPictures() as $picture) {
                 $picture->setTricks($trick);
-            //give a random name to the file which contains the picture
-                $file = md5(uniqid()).'.'.$picture->getFile()->guessExtension();
-            //save it into public/uploads/tricks
-            $picture->move(
-                $this->getParameter('pictures_directory'),
-                $file
+                $pictureFile = $picture->getFile();
+                //give a random name to the file which contains the picture
+                $fileName = md5(uniqid()).'.'.$pictureFile->guessExtension();
+                //save it into public/uploads/tricks
+                $pictureFile->move(
+                    $this->getParameter('pictures_directory').'/tricks',
+                $fileName
             );
-            
-                //create a new instance of Picture and define its title
-                $image= new Picture();
-                $image->setFile($file);
-                //add Picture in trick table
-                $trick->addPicture($picture);
+                $picture->setFileName($fileName);
             }
+
+            foreach ($trick->getVideos() as $video){
+                $video->setTricks($trick);
+            }
+
             $manager = $this->getDoctrine()->getManager();
             $manager->persist($trick);
             $manager->flush();

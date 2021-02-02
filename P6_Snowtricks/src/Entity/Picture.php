@@ -2,8 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\PictureRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\PictureRepository;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * @ORM\Entity(repositoryClass=PictureRepository::class)
@@ -25,12 +27,19 @@ class Picture
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $file;
+    private $fileName;
 
     /**
      * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="pictures")
      */
     private $tricks;
+
+    /**
+     * @Assert\Image(
+     *  mimeTypes= {"image/jpeg", "image/jpg", "image/png"}
+     *  )
+     */
+    private $file;
 
     public function getId(): ?int
     {
@@ -49,14 +58,14 @@ class Picture
         return $this;
     }
 
-    public function getFile(): ?string
+    public function getFileName(): ?string
     {
-        return $this->file;
+        return $this->fileName;
     }
 
-    public function setFile(string $file): self
+    public function setFileName(string $fileName): self
     {
-        $this->file = $file;
+        $this->fileName = $fileName;
 
         return $this;
     }
@@ -69,6 +78,18 @@ class Picture
     public function setTricks(?Trick $tricks): self
     {
         $this->tricks = $tricks;
+
+        return $this;
+    }
+
+
+    public function getFile() {
+        return $this->file;
+    }
+
+    public function setFile(UploadedFile $file): self
+    {
+        $this->file = $file;
 
         return $this;
     }
