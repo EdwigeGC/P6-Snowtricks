@@ -2,8 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\PictureRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\PictureRepository;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * @ORM\Entity(repositoryClass=PictureRepository::class)
@@ -23,19 +25,21 @@ class Picture
     private $title;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $caption;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
-    private $file;
+    private $fileName;
 
     /**
      * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="pictures")
      */
     private $tricks;
+
+    /**
+     * @Assert\Image(
+     *  mimeTypes= {"image/jpeg", "image/jpg", "image/png"}
+     *  )
+     */
+    private $file;
 
     public function getId(): ?int
     {
@@ -54,26 +58,14 @@ class Picture
         return $this;
     }
 
-    public function getCaption(): ?string
+    public function getFileName(): ?string
     {
-        return $this->caption;
+        return $this->fileName;
     }
 
-    public function setCaption(?string $caption): self
+    public function setFileName(string $fileName): self
     {
-        $this->caption = $caption;
-
-        return $this;
-    }
-
-    public function getFile(): ?string
-    {
-        return $this->file;
-    }
-
-    public function setFile(string $file): self
-    {
-        $this->file = $file;
+        $this->fileName = $fileName;
 
         return $this;
     }
@@ -86,6 +78,18 @@ class Picture
     public function setTricks(?Trick $tricks): self
     {
         $this->tricks = $tricks;
+
+        return $this;
+    }
+
+
+    public function getFile() {
+        return $this->file;
+    }
+
+    public function setFile(UploadedFile $file): self
+    {
+        $this->file = $file;
 
         return $this;
     }
