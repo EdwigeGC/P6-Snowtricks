@@ -31,6 +31,23 @@ class TricksController extends AbstractController
     }
 
     /**
+     * Display one trick's details
+     * @Route("/tricks/details/{id}", name="trick_details")
+     * 
+     * @param integer $id
+     * @return Response
+     */
+    public function trickDetails($id, TrickRepository $repository)
+    {
+        $repository= $this-> getDoctrine()->getRepository(Trick::class);
+        $trick= $repository->findOneById($id);
+       
+        return $this->render('tricks/trickDetails.html.twig',[
+            'trick' =>$trick
+        ]);
+    }
+
+    /**
      * Creates a new snowboard trick
      *
      * @Route("/trick/new", name="add_trick")
