@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ trick.name }} details{% endblock %}
+
+{% block body %}
+    <!--main container-->
+    <div class="container">
+    <!--main image and trick's name-->
+        <div class="container text-center py-5">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="fw-dark">{{ trick.name }}</h1>
+                    <img src="https://via.placeholder.com/800x200" class="img-fluid" alt="main picture">
+                        {% if app.user %}
+                            <a href="{{ path('delete_trick', {'id': trick.id}) }}" onclick="return confirm('Do you really want to delete this trick?')"><i class="fas fa-trash-alt"></i></a>
+                        {% endif %}
+                </div>
+            </div>
+        </div>
+
+
+    <!--medias-->
+
+        <div class="container">
+            <div class="row row-cols-4 my-2 py-2">
+
+                {% for picture in trick.pictures %}
+                        <img src="{{ asset('uploads/tricks/'~ picture.fileName)}}" class="img-thumbnail" alt="{{ picture.title }}">
+                {% endfor %}
+
+                {% for video in trick.videos %}
+                        <iframe width="560" height="315" src="{{ video.url }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class= "col-md-10">
+                    <h2> Description </h2>
+                    <p class="text-wrap">{{ trick.description }}</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class= "col-md-10">
+                <p><span class="badge bg-secondary">{{ trick.category.name }}</span></p>
+                <p>Mis à jour le {{ trick.modificationDate is empty ? trick.creationDate|date("d/m/Y H:i:s") }}, par {{ trick.user.username }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
