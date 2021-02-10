@@ -3,16 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Trick;
-use App\Entity\Picture;
+
 use App\Form\AddTrickType;
 use App\Repository\TrickRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\Persistence\ObjectManager;
+
 
 class TricksController extends AbstractController
 {
@@ -41,7 +39,7 @@ class TricksController extends AbstractController
     {
         $repository= $this-> getDoctrine()->getRepository(Trick::class);
         $trick= $repository->findOneById($id);
-       
+
         return $this->render('tricks/trickDetails.html.twig',[
             'trick' =>$trick
         ]);

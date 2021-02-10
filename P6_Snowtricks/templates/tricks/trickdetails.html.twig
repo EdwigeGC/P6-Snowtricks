@@ -34,6 +34,7 @@
             </div>
         </div>
 
+    <!--Trick's details-->
         <div class="container">
             <div class="row">
                 <div class= "col-md-10">
@@ -48,6 +49,39 @@
                 <p>Mis à jour le {{ trick.modificationDate is empty ? trick.creationDate|date("d/m/Y H:i:s") }}, par {{ trick.user.username }}</p>
                 </div>
             </div>
+        </div>
+        <hr>
+    <!--chat room-->
+        <div>
+            <h2>Comments</h2>
+            {% if app.user %}
+                    <div class="mb-3">
+                        <label for="add-comment" class="form-label">Leave a comment</label>
+                        <input type="text-area" class="form-control" id="add-comment" placeholder="Write your comment here">
+                    </div>
+
+            {% else %}
+                <p>To let a comment please sign in or join us and sign up</p>
+            {% endif %}
+
+            <hr>
+
+            {% if trick.comments|length >0 %}
+                {% for comment in trick.comments %}
+                    <div class="bg-light">
+                        <p>{{ comment.user.username }}, le {{ comment.creationDate|date("d/m/Y à H:i:s") }}</p>
+                        <blockquote>
+                            <p>{{ comment.content }}</p>
+                        </blockquote>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>Be the first one to comment this trick !</p>
+
+            {% endif %}
+
+
+
         </div>
     </div>
 {% endblock %}
