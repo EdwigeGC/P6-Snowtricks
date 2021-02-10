@@ -3,16 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Trick;
-use App\Entity\Picture;
 use App\Form\AddTrickType;
 use App\Repository\TrickRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\Persistence\ObjectManager;
 
 class TricksController extends AbstractController
 {
@@ -32,7 +28,7 @@ class TricksController extends AbstractController
 
     /**
      * Display one trick's details
-     * @Route("/tricks/details/{id}", name="trick_details")
+     * @Route("/trick/details/{id}", name="trick_details")
      * 
      * @param integer $id
      * @return Response
@@ -54,7 +50,7 @@ class TricksController extends AbstractController
      * 
      * @return Response
      */
-    public function create(Request $request){
+    public function create (Request $request){
         $trick= new Trick();
         
         $form=$this->createForm(AddTrickType::class, $trick);
@@ -119,6 +115,46 @@ class TricksController extends AbstractController
         );
 
         return $this->redirectToRoute('home');
+    }
+
+    /**
+     * Display form to edit a trick
+     *
+     * @Route ("/edit/trick/{id}", name="edit_trick")
+     *
+     * @param Trick $trick
+     * @param Request $request
+     * @return Response
+     */
+    public function edit(Trick $trick,Request $request):Response
+    {
+        $form=$this->createForm(AddTrickType::class, $trick);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() ){
+
+            $trick -> setModificationDate(new\ Datetime)
+                    ->setUser($this->getUser());
+
+            $manager = $this->getDoctrine()->getManager();
+            $manager->persist($trick);
+            $manager->flush();
+
+            $this->addFlash(
+                'success',
+                "Modifications recorded"
+            );
+
+            return $this->redirectToRoute('trick_details',[
+                'id'=> $trick->getId(),
+                'trick'=>$trick->getPictures()
+            ]);
+        }
+
+            return $this->render('tricks/editTrick.html.twig',[
+                'form'=> $form->createView(),
+                'trick'=> $trick
+                ]);
     }
 
 }
