@@ -3,7 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Trick;
-
+use App\Entity\Comment;
+use App\Form\CommentType;
 use App\Form\AddTrickType;
 use App\Repository\TrickRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,17 +32,46 @@ class TricksController extends AbstractController
     /**
      * Display one trick's details
      * @Route("/tricks/details/{id}", name="trick_details")
-     * 
+     *
+     * @param Request $request
+     * @param TrickRepository $repository
      * @param integer $id
      * @return Response
      */
-    public function trickDetails($id, TrickRepository $repository)
+    public function trickDetails($id, TrickRepository $repository,Request $request)
     {
         $repository= $this-> getDoctrine()->getRepository(Trick::class);
         $trick= $repository->findOneById($id);
+dump($trick);
+        //comments
+        $comment= new Comment();
+        $form=$this->createForm(CommentType::class, $comment);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()){
+            dump($comment->getTricks($trick));
+            $comment->setCreationDate(new \Datetime)
+                    ->setUser($this->getUser())
+                    ->setTricks($trick);
+
+            $manager = $this->getDoctrine()->getManager();
+            $manager->persist($comment);
+            $manager->flush();
+
+            $this->addFlash(
+                'success',
+                "New comment added !"
+            );
+
+            return $this->redirectToRoute('trick_details', [
+                'id'=>$trick->getId(),
+                ]);
+        }
 
         return $this->render('tricks/trickDetails.html.twig',[
-            'trick' =>$trick
+            'trick' =>$trick,
+            'form'=>$form->createView()
         ]);
     }
 
