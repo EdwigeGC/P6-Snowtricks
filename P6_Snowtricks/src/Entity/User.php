@@ -13,10 +13,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @UniqueEntity(
- *      fields={"email"},
- *      message="Email address already used for another account."
- * )
- * @UniqueEntity(
  *      fields={"username"},
  *      message="Username not available. Choose another one"
  * )
@@ -48,7 +44,6 @@ class User implements UserInterface
     /**
      * @var string
      * @ORM\Column(type="string", length=45)
-     * @Assert\NotBlank(message="Merci de remplir ce champs")
      * @Assert\Length(min=2, max=25)
      */
     private $username;
@@ -56,7 +51,6 @@ class User implements UserInterface
     /**
      * @var string
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="Merci de remplir ce champs")
      * @Assert\Email()
      */
     private $email;
