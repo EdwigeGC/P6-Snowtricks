@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Account user{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <h1 class="h3 mb-3 fw-normal">Change information into your account</h1>
+
+        {{ form_start(form) }}
+
+        {{ form_row(form.lastName) }}
+        {{ form_row(form.firstName) }}
+        <div>
+            <a href="">Update your password</a>
+        </div>
+
+        <div>
+        {% if user.photo is not null %}
+            <img src="{{ asset('uploads/profile/'~ user.photo)}}" class="img-thumbnail">
+        {% endif %}
+        {{ form_row(form.file) }}
+        </div>
+
+        <button class="btn btn-primary" type="submit">Validate</button>
+
+        {{ form_end(form) }}
+    </div>
+
+{% endblock %}
