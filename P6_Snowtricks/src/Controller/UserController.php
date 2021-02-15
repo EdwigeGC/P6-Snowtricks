@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationType;
+use App\Form\AccountType;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -95,4 +96,52 @@ class UserController extends AbstractController
         );
         return $this->redirectToRoute('home');
     }
+
+    /**
+     * Provides the form to change information on user's account
+     *
+     * @Route ("account/profile", name="account_profile")
+     * @param Request $request
+     * @return Response
+     */
+    public function profile(Request $request): Response
+    {
+        $user = $this->getUser();
+
+        $form = $this->createForm(AccountType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $photoFile= $user->getFile();
+
+            if( $photoFile != null){
+                $photoName = md5(uniqid()).'.'.$photoFile->guessExtension();
+                //save it into public/uploads/profile
+                $photoFile->move(
+                    $this->getParameter('pictures_directory').'/profile',
+                    $photoName
+                );
+                $user->setPhoto($photoName);
+            }
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                "The information is now updated"
+            );
+
+            return $this->redirectToRoute('home');
+        }
+
+        return $this->render('user/profile.html.twig',[
+            'form'=> $form->createView(),
+            'user'=> $user
+        ]);
+
+    }
+
 }
