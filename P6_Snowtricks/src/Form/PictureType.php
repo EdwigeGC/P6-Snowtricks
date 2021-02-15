@@ -28,6 +28,7 @@ class PictureType extends AbstractType
                 'multiple' => false,
                 'required' =>true,
             ])
+          //  ->add('fileName', TextType::class)
         ;
     }
 

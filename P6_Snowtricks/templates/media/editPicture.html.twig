@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit a picture{% endblock %}
+{% form_theme form _self %}
+
+{% block body %}
+<div class="container">
+    <h1 class="h3 mb-3 fw-normal">Edit a picture</h1>
+
+    {{ form_start(form) }}
+    {{ form_row(form.title) }}
+      {{ form_row(form.file) }}
+
+     <button class="btn btn-primary" type="submit">Save</button>
+
+    {{ form_end(form) }}
+{% endblock %}
+
+
+    {% block _picture_file_entry_widget %}
+    <div class="form-group" id="block_{{id}}">
+        {%  if picture.fileName is not empty %}
+            <img src="{{ asset('uploads/tricks/'~ picture.fileName)}}" class="img-thumbnail" alt="{{ picture.title }}">
+        {% else  %}
+            {{ form_row(form.file) }}
+        {% endif %}
+        <div class="col-2">
+            <button class="btn btn-danger" type="button" data-action="delete" data-target="#block_{{id}}">X</button>
+        </div>
+    </div>
+    {%  endblock %}
