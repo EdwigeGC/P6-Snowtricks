@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\RegistrationType;
 use App\Form\AccountType;
+use App\Form\ResetPasswordType;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,8 +48,8 @@ class UserController extends AbstractController
 
             $email= (new TemplatedEmail())
             ->from('no.reply@snowtricks.com')
-            ->to('edwige.gentymail@gmail.com')
-            ->subject('test')
+            ->to($user->getEmail())
+            ->subject('Confirmation of your registration')
             ->htmlTemplate('emails/signup.html.twig')
             ->context([
                 'username' => $user->getUsername(),
@@ -82,7 +83,7 @@ class UserController extends AbstractController
     */
     public function checkRegistration(UserRepository $repository, $username, $token){
        
-        $user= $repository->findOneByUsername($username);
+        $user= $repository->findOneBy(['username'=> $username]);
         if ($token != null && $token == $user->getApiToken()){
             $user->setValidated(true);
             $entityManager = $this->getDoctrine()->getManager();
@@ -144,4 +145,45 @@ class UserController extends AbstractController
 
     }
 
+     * Provides form to create a new password
+     *
+     * @Route ("/password/new/{userEmail}/{token}", name="reset_password")
+     *
+     * @param Request $request
+     * @param UserRepository $repository
+     * @param string $userEmail
+     * @param string $token
+     */
+    public function resetPassword(Request $request, UserRepository $repository, $userEmail, $token, UserPasswordEncoderInterface $encoder)
+    {
+        $user= $repository->findOneBy(['email'=>$userEmail]);
+        if ($token != null && $token === $user->getApiToken()) {
+
+            $form=$this->createForm( ResetPasswordType::class);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted () && $form->isValid())
+            {
+                $user->setApiToken(null);
+                $newPassword=$form->get('password')->getData('password');
+                $user->setPassword($encoder->encodePassword($user, $newPassword));
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                $this->addFlash(
+                    'success',
+                    "New password recorded!"
+                );
+
+                return $this->redirectToRoute('home');
+            }
+            return $this->render('/security/reset_password.html.twig', [
+                'form'=> $form->createView()
+            ]);
+        }
+        else {
+            return $this->render('home');
+        }
+    }
 }

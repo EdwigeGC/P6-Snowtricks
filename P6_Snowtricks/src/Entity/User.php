@@ -16,7 +16,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @UniqueEntity(
  *      fields={"email"},
  *      message="Email address already used for another account."
- * )
+ * 
  */
 class User implements UserInterface
 {
@@ -53,7 +53,6 @@ class User implements UserInterface
     /**
      * @var string
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="Merci de remplir ce champs")
      * @Assert\Email()
      */
     private $email;

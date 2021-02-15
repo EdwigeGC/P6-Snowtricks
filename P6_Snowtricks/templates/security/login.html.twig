@@ -25,7 +25,7 @@
             value="{{ csrf_token('authenticate') }}"
         >
 
-        <a href="forgotPassword">Forgot Password ?</a>
+        <a href="{{ path('forgot_password') }}">Forgot Password ?</a>
         
         <button class="btn btn-lg btn-primary" type="submit">
             Login
