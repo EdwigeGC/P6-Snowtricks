@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Trick;
 use App\Form\AddTrickType;
+use App\Form\EditTrickType;
 use App\Repository\TrickRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -128,7 +129,7 @@ class TricksController extends AbstractController
      */
     public function edit(Trick $trick,Request $request):Response
     {
-        $form=$this->createForm(AddTrickType::class, $trick);
+        $form=$this->createForm(EditTrickType::class, $trick);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() ){

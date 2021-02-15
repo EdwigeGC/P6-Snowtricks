@@ -37,7 +37,7 @@
                 {% for video in trick.videos %}
                     <iframe width="560" height="315" src="{{ video.url }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     <div>
-                        <a href="{{ path('edit_media', {'id': video.id}) }}" ><i class="fas fa-pencil-alt"></i></a>
+                        <a href="{{ path('edit_video', {'id': video.id, 'tricks': trick.id}) }}" ><i class="fas fa-pencil-alt"></i></a>
                         <a href="" onclick="return confirm('Do you really want to delete this trick?')"><i class="fas fa-trash-alt"></i></a>
                     </div>
                 {% endfor %}
