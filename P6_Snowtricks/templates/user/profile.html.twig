@@ -12,15 +12,15 @@
         {{ form_row(form.lastName) }}
         {{ form_row(form.firstName) }}
         <div>
-            <a href="">Update your password</a>
+            <a href="{{ path('password_process', {'user':app.user.id}) }}">Update your password</a>
         </div>
 
-        <div>
         {% if user.photo is not null %}
-            <img src="{{ asset('uploads/profile/'~ user.photo)}}" class="img-thumbnail">
+        <div>
+            <img src="{{ asset('uploads/profile/'~ user.photo)}}" class="img-thumbnail" alt="profile picture">
+        </div>
         {% endif %}
         {{ form_row(form.file) }}
-        </div>
 
         <button class="btn btn-primary" type="submit">Validate</button>
 
