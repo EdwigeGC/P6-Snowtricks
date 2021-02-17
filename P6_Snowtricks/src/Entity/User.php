@@ -16,7 +16,11 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @UniqueEntity(
  *      fields={"email"},
  *      message="Email address already used for another account."
- * 
+ * )
+ * @UniqueEntity(
+ *      fields={"username"},
+ *      message="Username already used for another account."
+ * )
  */
 class User implements UserInterface
 {
@@ -44,7 +48,7 @@ class User implements UserInterface
 
     /**
      * @var string
-     * @ORM\Column(type="string", length=45, nullable=true)
+     * @ORM\Column(type="string", length=45)
      * @Assert\NotBlank(message="Merci de remplir ce champs")
      * @Assert\Length(min=2, max=25)
      */
@@ -96,6 +100,11 @@ class User implements UserInterface
      *  )
      */
     private $file;
+
+    /**
+     * @var string|null
+     */
+    private $salt;
 
 
     public function __construct()
@@ -306,13 +315,16 @@ class User implements UserInterface
         return $this->file;
     }
 
-    public function setFile(UploadedFile $file): self
+    /**
+     * @param UploadedFile|null $file
+     * @return $this|null
+     */
+    public function setFile(UploadedFile $file=null): ?self
     {
         $this->file = $file;
 
         return $this;
     }
 
-   
 }
 

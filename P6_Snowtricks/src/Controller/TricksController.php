@@ -32,7 +32,7 @@ class TricksController extends AbstractController
     /**
      * Display one trick's details
      *
-     * @Route("/tricks/details/{id}", name="trick_details")
+     * @Route("/trick/details/{id}", name="trick_details")
      *
      * @param Request $request
      * @param TrickRepository $repository
@@ -41,6 +41,7 @@ class TricksController extends AbstractController
      */
     public function trickDetails($id, TrickRepository $repository,Request $request)
     {
+        dump($request);
         $repository= $this-> getDoctrine()->getRepository(Trick::class);
         $trick= $repository->findOneById($id);
 

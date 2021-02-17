@@ -41,18 +41,7 @@ class MediaController extends AbstractController
                 );
                 $picture->setTricks($tricks);
                 $picture->setFileName($pictureName);
-                dump($picture->setTricks($tricks));
             }
-
-
-            /*//give a random name to the file which contains the picture
-                $fileName = md5(uniqid()).'.'.$pictureFile->guessExtension();
-                //save it into public/uploads/tricks
-                $pictureFile->move(
-                    $this->getParameter('pictures_directory').'/tricks',
-                    $fileName
-                );
-                $picture->setFileName($fileName);*/
 
             $manager = $this->getDoctrine()->getManager();
             $manager->persist($picture);
@@ -83,9 +72,10 @@ class MediaController extends AbstractController
      * @param Trick $tricks
      * @param Request $request
      * @param Video $video
+     *
      * @return Response
      */
-    public function editVideo(Request $request, Video $video, Trick $tricks): Response
+    public function editVideo (Request $request, Video $video, Trick $tricks): Response
     {
         $form=$this->createForm(VideoType::class, $video);
         $form->handleRequest($request);
