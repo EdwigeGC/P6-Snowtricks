@@ -1,33 +1,26 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Snowtricks - {{ trick.name }} details{% endblock %}
+{% block title %}Snowtricks - {{ trick.name }}{% endblock %}
 
 {% block body %}
-    <!--main container-->
-    <div class="container">
+
+    <div class="trick container">
     <!--main image and trick's name-->
-        <section class="py-5 text-center container">
-            <div class="row py-lg-5">
-                <div class="col-lg-6 col-md-8 mx-auto">
-                    <h1 class="fw-light">{{ trick.name }} </h1>
-                    {% for picture in trick.pictures %}
-                    <img src="{{ asset('uploads/tricks/'~ picture.fileName)}}" class="img-thumbnail" alt="{{ picture.title }}">
-                    {% endfor %}
-
-                    {% if app.user %}
-                    <p>
-                            <a href="{{ path('edit_trick', {'id': trick.id}) }}"><i class="fas fa-pencil-alt"></i></a>
-                            <a href="{{ path('delete_trick', {'id': trick.id}) }}" onclick="return confirm('Do you really want to delete this trick?')"><i class="fas fa-trash-alt"></i></a>
-                    </p>
-                        {% endif %}
-                </div>
+        <div class="trick-title row py-lg-5" style="background-image:url({{ asset('uploads/tricks/'~ trick.mainPicture) }}">
+            <div class="col-lg-6 col-md-8 mx-auto">
+                <h1 class="title-article">{{ trick.name }}</h1>
+                <p class="lead-text">Join community of Snowtricks</p>
+                {% if app.user %}
+                    <div class="btn-group">
+                        <a href="{{ path('edit_trick', {'id': trick.id}) }}" class="btn btn-primary"><i class="fas fa-pencil-alt"></i></a>
+                        <a href="{{ path('delete_trick', {'id': trick.id}) }}" class="btn btn-danger" onclick="return confirm('Do you really want to delete this trick?')"><i class="fas fa-trash-alt"></i></a>
+                    </div>
+                {% endif %}
             </div>
-        </section>
-
+        </div>
 
     <!--medias-->
-
-        <div class="container">
+        <div class="media container">
             <div class="row row-cols-4 my-2 py-2">
 
                 {% for picture in trick.pictures %}
@@ -43,7 +36,7 @@
     <!--Trick's details-->
         <div class="container">
             <div class="row">
-                <div class= "col-md-10">
+                <div class= "col-md-10 mb-2">
                     <h2> Description </h2>
                     <p class="text-wrap">{{ trick.description }}</p>
                 </div>
@@ -51,9 +44,9 @@
 
             <div class="row">
                 <div class= "col-md-10">
-                <p><span class="badge bg-secondary">{{ trick.category.name }}</span></p>
-                    <p>Author:{{ trick.user.photo}} {{ trick.user.username }}</p>
-                <p>Créé le {{ trick.creationDate|date("d/m/Y à H:i:s") }} {{ trick.modificationDate is not empty ?  "mis à jour le " ~trick.modificationDate|date("d/m/Y à H:i:s") : "" }} </p>
+                    <span class="badge bg-secondary">{{ trick.category.name }}</span>
+                    <p>Author: {{ trick.user.username }}</p>
+                    <p>Créé le {{ trick.creationDate|date("d/m/Y à H:i:s") }} {{ trick.modificationDate is not empty ?  "mis à jour le " ~trick.modificationDate|date("d/m/Y à H:i:s") : "" }} </p>
                 </div>
             </div>
         </div>
@@ -85,9 +78,9 @@
 
             {% if trick.comments|length >0 %}
                 {% for comment in trick.comments %}
-                    <div class="bg-light">
-                        <img src="{{ asset('uploads/profile/'~ comment.user.photo)}}" class="img-thumbnail rounded circle" alt="{{ comment.user.username }}">
+                    <div class="comment bg-light rounded mb-3">
                         <p>{{ comment.user.username }}, le {{ comment.creationDate|date("d/m/Y à H:i:s") }}</p>
+                        <img src="{{ asset('uploads/profile/'~ comment.user.photo)}}" class="img-thumbnail rounded circle" alt="{{ comment.user.username }}">
                         <blockquote>
                             <p>{{ comment.content }}</p>
                         </blockquote>
@@ -100,4 +93,5 @@
 
         </div>
     </div>
+
 {% endblock %}

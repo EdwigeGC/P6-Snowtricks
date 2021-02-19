@@ -88,13 +88,26 @@ class TricksController extends AbstractController
         $trick= new Trick();
         
         $form=$this->createForm(AddTrickType::class, $trick);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){
 
             $trick  ->setCreationDate(new \Datetime)
                     ->setUser($this->getUser());
+
+            //tricks main Picture
+            $mainFile= $trick->getFileMainPicture();
+
+            if( $mainFile != null) {
+                //rename the file with random strings
+                $mainName = md5(uniqid()) . '.' . $mainFile->guessExtension();
+                //save it into public/uploads/tricks
+                $mainFile->move(
+                    $this->getParameter('pictures_directory') . '/tricks',
+                    $mainName
+                );
+                $trick->setMainPicture($mainName);
+            }
 
             foreach ($trick->getPictures() as $picture) {
                 $picture->setTricks($trick);
