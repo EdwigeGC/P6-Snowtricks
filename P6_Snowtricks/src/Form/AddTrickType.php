@@ -13,7 +13,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class AddTrickType extends AbstractType
 {
@@ -34,6 +33,10 @@ class AddTrickType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, $this->setConfigurationAttribute("trick's name?", true))
+            ->add('fileMainPicture',FileType::class, [
+                'multiple' => false,
+                'required' =>true,
+            ])
             ->add('category', EntityType::class, [
                 'label' => "Choose a category", 
                 'class' => Category::class,

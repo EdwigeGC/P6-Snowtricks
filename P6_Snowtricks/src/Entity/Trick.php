@@ -6,10 +6,17 @@ use App\Repository\TrickRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 
 /**
  * @ORM\Entity(repositoryClass=TrickRepository::class)
+ * @UniqueEntity(
+ *      fields={"name"},
+ *      message="This trick already exists."
+ * )
  */
 class Trick
 {
@@ -41,6 +48,19 @@ class Trick
     private $modificationDate;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     * @var string $mainPicture
+     */
+    private $mainPicture;
+
+    /**
+     * @Assert\Image(
+     *  mimeTypes= {"image/jpeg", "image/jpg", "image/png"}
+     *  )
+     */
+    private $fileMainPicture;
+
+    /**
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="tricks")
      * @ORM\JoinColumn(nullable=true)
      */
@@ -56,6 +76,7 @@ class Trick
      * @ORM\JoinColumn(nullable=true)
      */
     private $user;
+
 
     /**
      * @ORM\OneToMany(targetEntity=Picture::class, mappedBy="tricks", orphanRemoval=true, cascade={"persist"})
@@ -125,6 +146,30 @@ class Trick
     public function setModificationDate(?\DateTimeInterface $modificationDate): self
     {
         $this->modificationDate = $modificationDate;
+
+        return $this;
+    }
+
+    public function getMainPicture(): ?string
+    {
+        return $this->mainPicture;
+    }
+
+    public function setMainPicture(string $mainPicture): self
+    {
+        $this->mainPicture = $mainPicture;
+
+        return $this;
+    }
+
+    public function getFileMainPicture()
+    {
+        return $this->fileMainPicture;
+    }
+
+    public function setFileMainPicture(UploadedFile $fileMainPicture): self
+    {
+        $this->fileMainPicture = $fileMainPicture;
 
         return $this;
     }

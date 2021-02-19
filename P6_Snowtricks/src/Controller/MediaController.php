@@ -16,7 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class MediaController extends AbstractController
 {
     /**
-     * @Route ("/picture/edit/{id}/{tricks}", name="edit_media")
+     * @Route ("/picture/edit/{id}/{tricks}", name="edit_picture")
      *
      * @param Trick $tricks
      * @param Picture $picture
@@ -66,6 +66,29 @@ class MediaController extends AbstractController
     }
 
     /**
+     * Delete a picture from the database
+     *
+     * @Route("/picture/delete/{id}", name="delete_picture")
+     *
+     * @param Picture $picture
+     * @return Response
+     */
+    public function deletePicture(Picture $picture){
+        $manager = $this->getDoctrine()->getManager();
+        $manager->remove($picture);
+        $manager->flush();
+
+        $this->addFlash(
+            'success',
+            "Success: the picture is deleted."
+        );
+
+        return $this->redirectToRoute('edit_trick',[
+            'id'=> $picture->getTricks()->getId(),
+        ]);
+    }
+
+    /**
      *
      * @Route ("/video/edit/{id}/{tricks}", name="edit_video")
      *
@@ -97,13 +120,34 @@ class MediaController extends AbstractController
             ]);
         }
 
-
         return $this->render('media/editVideo.html.twig',[
             'form'=> $form->createView(),
             'picture'=> $video,
             'trick'=>$request->get('tricks')
         ]);
+    }
 
+    /**
+     * Delete a video from the database
+     *
+     * @Route("/video/delete/{id}", name="delete_video")
+     *
+     * @param Video $video
+     * @return Response
+     */
+    public function deleteVideo(Video $video){
+        $manager = $this->getDoctrine()->getManager();
+        $manager->remove($video);
+        $manager->flush();
+
+        $this->addFlash(
+            'success',
+            "Success: the picture is deleted."
+        );
+
+        return $this->redirectToRoute('edit_trick',[
+            'id'=> $video->getTricks()->getId(),
+        ]);
     }
 
 }
