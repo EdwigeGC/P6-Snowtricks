@@ -8,13 +8,15 @@ use App\Form\RegistrationType;
 use App\Form\AccountType;
 use App\Form\ResetPasswordType;
 use App\Repository\UserRepository;
+use App\Service\FileUploader;
+use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use App\Service\Mail;
 
 /**
  * Provides common features needed for User management.
@@ -27,10 +29,16 @@ class UserController extends AbstractController
      * Creates 
      * 
      * @Route("/registration", name="user_registration")
+     *
+     * @param Request $request
+     * @param UserPasswordEncoderInterface $encoder
+     * @param Mail $mail
+     * @param ObjectManager $manager
+     * @param MailerInterface $mailer
      * 
      * @return Response
      */
-    public function registration(Request $request, UserPasswordEncoderInterface $encoder,MailerInterface $mailer): Response
+    public function registration(Request $request, UserPasswordEncoderInterface $encoder,Mail $mail, ObjectManager $manager, MailerInterface $mailer): Response
     {
         $user= new User();
         
@@ -44,20 +52,10 @@ class UserController extends AbstractController
                 ->setValidated(false)
                 ->setApiToken(md5(random_bytes(10)))
                 ->setPhoto('avatar.png');
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
+            $manager->persist($user);
+            $manager->flush();
 
-            $email= (new TemplatedEmail())
-            ->from('no.reply@snowtricks.com')
-            ->to($user->getEmail())
-            ->subject('Confirmation of your registration')
-            ->htmlTemplate('emails/signup.html.twig')
-            ->context([
-                'username' => $user->getUsername(),
-                'token' => $user->getApiToken()
-            ]);
-
+            $email= $mail->mailFormat($user, 'emails/signup.html.twig', 'Confirmation of your registration');
             $mailer->send($email);
 
             $this->addFlash(
@@ -79,20 +77,21 @@ class UserController extends AbstractController
     * @param UserRepository $repository
     * @param string $username
     * @param string $token
+    * @param ObjectManager $manager
+    *
     * @return Response
     *
     * @Route("/check-registration/{username}/{token}", name="check_registration")
     */
-    public function checkRegistration(UserRepository $repository, string $username, string $token):Response
+    public function checkRegistration(UserRepository $repository, string $username, string $token, ObjectManager $manager):Response
     {
        
         $user= $repository->findOneBy(['username'=> $username]);
         if ($token != null && $token == $user->getApiToken()){
             $user->setValidated(true);
             $user->setApiToken(null);
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
+            $manager->persist($user);
+            $manager->flush();
         }
 
         $this->addFlash(
@@ -107,9 +106,12 @@ class UserController extends AbstractController
      *
      * @Route ("account/profile", name="account_profile")
      * @param Request $request
+     * @param ObjectManager $manager
+     * @param FileUploader $fileUploader
+     *
      * @return Response
      */
-    public function profile(Request $request): Response
+    public function profile(Request $request, ObjectManager $manager, FileUploader $fileUploader): Response
     {
         $user = $this->getUser();
 
@@ -121,20 +123,12 @@ class UserController extends AbstractController
             $photoFile= $user->getFile();
 
             if( $photoFile != null){
-                //rename the file with random strings
-                $photoName = md5(uniqid()).'.'.$photoFile->guessExtension();
-                //save it into public/uploads/profile
-                $photoFile->move(
-                    $this->getParameter('pictures_directory').'/profile',
-                    $photoName
-                );
-                $user->setPhoto($photoName);
+                $user->setPhoto($fileUploader->upload($photoFile));
             }
 
             $user->setFile(null);
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
+            $manager->persist($user);
+            $manager->flush();
 
             $this->addFlash(
                 'success',
@@ -159,10 +153,12 @@ class UserController extends AbstractController
      * @param UserRepository $repository
      * @param string $userEmail
      * @param string $token
+      * @param UserPasswordEncoderInterface $encoder
+      * @param ObjectManager $manager
       *
       * @return Response
      */
-    public function resetPassword(Request $request, UserRepository $repository, $userEmail, $token, UserPasswordEncoderInterface $encoder)
+    public function resetPassword(Request $request, UserRepository $repository, string $userEmail, string $token, UserPasswordEncoderInterface $encoder, ObjectManager $manager)
     {
         $user = $repository->findOneBy(['email' => $userEmail]);
         if ($token != null && $token === $user->getApiToken()) {
@@ -174,9 +170,8 @@ class UserController extends AbstractController
                 $user->setApiToken(null);
                 $newPassword = $form->get('password')->getData('password');
                 $user->setPassword($encoder->encodePassword($user, $newPassword));
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->persist($user);
-                $entityManager->flush();
+                $manager->persist($user);
+                $manager->flush();
 
                 $this->addFlash(
                     'success',
@@ -200,10 +195,13 @@ class UserController extends AbstractController
      *
      * @param Request $request
      * @param UserRepository $repository
+     * @param Mail $mail
+     * @param MailerInterface $mailer
+     * @param ObjectManager $manager
      *
      * @return Response
      */
-    public function forgotPassword(Request $request, UserRepository $repository, MailerInterface $mailer) :Response
+    public function forgotPassword(Request $request, UserRepository $repository, Mail $mail, MailerInterface $mailer, ObjectManager $manager) :Response
     {
         $form=$this->createForm( ForgotPasswordType::class);
         $form->handleRequest($request);
@@ -217,20 +215,10 @@ class UserController extends AbstractController
             if($user != null)
             {
                 $user->setApiToken(md5(random_bytes(10)));
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->persist($user);
-                $entityManager->flush();
+                $manager->persist($user);
+                $manager->flush();
 
-                $email = (new TemplatedEmail())
-                    ->from('no.reply@snowtricks.com')
-                    ->to($user->getEmail())
-                    ->subject('Change your password')
-                    ->htmlTemplate('emails/password.html.twig')
-                    ->context([
-                        'userEmail'=> $user->getEmail(),
-                        'token' => $user->getApiToken()
-                    ]);
-
+                $email= $mail->mailFormat($user, 'emails/password.html.twig', 'Forgot password process');
                 $mailer->send($email);
 
                 $this->addFlash(
@@ -238,7 +226,7 @@ class UserController extends AbstractController
                     "If the Email is linked to an account, you will receive an Email to change your password."
                 );
 
-                return $this->redirectToRoute('forgot_password');
+                return $this->redirectToRoute('home');
             }
 
             else{
@@ -262,26 +250,18 @@ class UserController extends AbstractController
      *
      * @param MailerInterface $mailer
      * @param User $user
+     * @param Mail $mail
+     * @param ObjectManager $manager
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return Response
      */
-        public function passwordProcess (MailerInterface $mailer, User $user)
+        public function passwordProcess (MailerInterface $mailer, User $user, Mail $mail, ObjectManager $manager) :Response
     {
         $user->setApiToken(md5(random_bytes(10)));
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($user);
-        $entityManager->flush();
+        $manager->persist($user);
+        $manager->flush();
 
-        $email = (new TemplatedEmail())
-            ->from('no.reply@snowtricks.com')
-            ->to($user->getEmail())
-            ->subject('Change your password')
-            ->htmlTemplate('emails/password.html.twig')
-            ->context([
-                'userEmail'=> $user->getEmail(),
-                'token' => $user->getApiToken()
-            ]);
-
+        $email= $mail->mailFormat($user, 'emails/password.html.twig', 'New password process');
         $mailer->send($email);
 
         $this->addFlash(

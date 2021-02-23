@@ -8,6 +8,9 @@ use App\Form\CommentType;
 use App\Form\AddTrickType;
 use App\Form\EditTrickType;
 use App\Repository\TrickRepository;
+use App\Service\UploadsPicture;
+use Doctrine\Persistence\ObjectManager;
+use App\Service\FileUploader;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,8 +20,13 @@ class TricksController extends AbstractController
 {
     /**
      * Display home page of the website
+     *
      * @Route("/home", name="home")
      * @Route("/")
+     *
+     * @param TrickRepository $repository
+     *
+     * @return Response
      */
     public function home(TrickRepository $repository): Response
     {
@@ -34,15 +42,15 @@ class TricksController extends AbstractController
      *
      * @Route("/trick/details/{id}", name="trick_details")
      *
+     * @param integer $id
      * @param Request $request
      * @param TrickRepository $repository
-     * @param integer $id
+     * @param ObjectManager $manager
+     *
      * @return Response
      */
-    public function trickDetails($id, TrickRepository $repository,Request $request)
+    public function trickDetails($id, TrickRepository $repository, Request $request, ObjectManager $manager)
     {
-        dump($request);
-        $repository= $this-> getDoctrine()->getRepository(Trick::class);
         $trick= $repository->findOneById($id);
 
         //comments
@@ -52,12 +60,10 @@ class TricksController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){
-            dump($comment->getTricks($trick));
             $comment->setCreationDate(new \Datetime)
                     ->setUser($this->getUser())
                     ->setTricks($trick);
 
-            $manager = $this->getDoctrine()->getManager();
             $manager->persist($comment);
             $manager->flush();
 
@@ -65,26 +71,30 @@ class TricksController extends AbstractController
                 'success',
                 "New comment added !"
             );
-
             return $this->redirectToRoute('trick_details', [
                 'id'=>$trick->getId(),
                 ]);
         }
 
         return $this->render('tricks/trickDetails.html.twig',[
+            'form'=>$form->createView(),
             'trick' =>$trick,
-            'form'=>$form->createView()
         ]);
     }
 
     /**
-     * Creates a new snowboard trick
+     * Creates a new snowboard trick. It uses "upload" function from App\Service\FileUploader to rename file uploaded and move them in Picture_Directory
      *
      * @Route("/trick/new", name="add_trick")
+     *
+     * @param Request $request
+     * @param FileUploader $fileUploader
+     * @param ObjectManager $manager
      * 
      * @return Response
      */
-    public function create (Request $request){
+    public function create (Request $request, FileUploader $fileUploader, ObjectManager $manager) :Response
+    {
         $trick= new Trick();
         
         $form=$this->createForm(AddTrickType::class, $trick);
@@ -96,37 +106,20 @@ class TricksController extends AbstractController
                     ->setUser($this->getUser());
 
             //tricks main Picture
-            $mainFile= $trick->getFileMainPicture();
-
-            if( $mainFile != null) {
-                //rename the file with random strings
-                $mainName = md5(uniqid()) . '.' . $mainFile->guessExtension();
-                //save it into public/uploads/tricks
-                $mainFile->move(
-                    $this->getParameter('pictures_directory') . '/tricks',
-                    $mainName
-                );
-                $trick->setMainPicture($mainName);
+            $mainPictureFile= $trick->getFileMainPicture();
+            if( $mainPictureFile != null) {
+                $trick->setMainPicture($fileUploader->upload($mainPictureFile));
             }
-
+            //pictures
             foreach ($trick->getPictures() as $picture) {
-                $picture->setTricks($trick);
-                $pictureFile = $picture->getFile();
-                //give a random name to the file which contains the picture
-                $fileName = md5(uniqid()).'.'.$pictureFile->guessExtension();
-                //save it into public/uploads/tricks
-                $pictureFile->move(
-                    $this->getParameter('pictures_directory').'/tricks',
-                $fileName
-            );
-                $picture->setFileName($fileName);
+                $picture->setFileName($fileUploader->upload($picture->getFile()))
+                    ->setTricks($trick);
             }
-
+            //videos
             foreach ($trick->getVideos() as $video){
                 $video->setTricks($trick);
             }
 
-            $manager = $this->getDoctrine()->getManager();
             $manager->persist($trick);
             $manager->flush();
 
@@ -134,13 +127,11 @@ class TricksController extends AbstractController
                 'success',
                 "New trick added !"
             );
-    
             return $this->redirectToRoute('home');
         }
         return $this->render('tricks/addTrick.html.twig', [
             'form'=> $form->createView(),
         ]);
-       
     }
 
     /**
@@ -148,11 +139,13 @@ class TricksController extends AbstractController
      * 
      * @Route("/trick/delete/{id}", name="delete_trick")
      * 
-     * @param Trick $trick 
+     * @param Trick $trick
+     *@param ObjectManager $manager
+     *
      * @return Response
      */
-    public function delete(Trick $trick){
-        $manager = $this->getDoctrine()->getManager();
+    public function delete(Trick $trick, ObjectManager $manager): Response
+    {
         $manager->remove($trick);
         $manager->flush();
 
@@ -171,9 +164,11 @@ class TricksController extends AbstractController
      *
      * @param Trick $trick
      * @param Request $request
+     * @param ObjectManager $manager
+     *
      * @return Response
      */
-    public function edit(Trick $trick,Request $request):Response
+    public function edit(Trick $trick,Request $request, ObjectManager $manager):Response
     {
         $form=$this->createForm(EditTrickType::class, $trick);
         $form->handleRequest($request);
@@ -183,7 +178,6 @@ class TricksController extends AbstractController
             $trick -> setModificationDate(new\ Datetime)
                     ->setUser($this->getUser());
 
-            $manager = $this->getDoctrine()->getManager();
             $manager->persist($trick);
             $manager->flush();
 

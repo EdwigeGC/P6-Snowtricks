@@ -18,16 +18,21 @@
     {% for trick in tricks %}
     <div class="col">
       <div class="tricks card shadow-sm mx-3 mb-3">
-        <img src="{{ asset('uploads/tricks/'~ trick.mainPicture)}}" class="img-thumbnail trick-thumbnail" alt="{{ trick.name }}">
+        <img src="{{ asset('uploads/'~ trick.mainPicture)}}" class="img-thumbnail trick-thumbnail" alt="{{ trick.name }}">
         <div class="card-body">
           <h2><a href="/trick/details/{{ trick.id }}">{{ trick.name }}</a></h2>
-          <p><span class="badge bg-secondary">{{ trick.category.name }}</p>
-          <div class="icons">
-            {% if app.user %}
-              <a href="{{ path('edit_trick', {'id': trick.id}) }}"><i class="fas fa-pencil-alt"></i></a>
-              <a href="{{ path('delete_trick', {'id': trick.id}) }}" onclick="return confirm('Do you really want to delete this trick?')"><i class="fas fa-trash-alt"></i></a>
-            {% endif %}
+          <div class="row">
+            <div class="col text-start">
+              <p><span class="badge">{{ trick.category.name }}</span></p>
+            </div>
+            <div class="col icons text-end">
+              {% if app.user %}
+                <a href="{{ path('edit_trick', {'id': trick.id}) }}"><i class="fas fa-pencil-alt"></i></a>
+                <a href="{{ path('delete_trick', {'id': trick.id}) }}" onclick="return confirm('Do you really want to delete this trick?')"><i class="fas fa-trash-alt"></i></a>
+              {% endif %}
+            </div>
           </div>
+
         </div>
       </div>
     </div>

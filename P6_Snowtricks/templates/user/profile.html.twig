@@ -17,7 +17,7 @@
 
         {% if user.photo is not null %}
         <div>
-            <img src="{{ asset('uploads/profile/'~ user.photo)}}" class="img-thumbnail" alt="profile picture">
+            <img src="{{ asset('uploads/'~ user.photo)}}" class="img-thumbnail" alt="profile picture">
         </div>
         {% endif %}
         {{ form_row(form.file) }}

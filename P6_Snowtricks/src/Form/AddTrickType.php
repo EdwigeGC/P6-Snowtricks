@@ -32,7 +32,7 @@ class AddTrickType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class, $this->setConfigurationAttribute("trick's name?", true))
+            ->add('name', TextType::class, $this->setConfigurationAttribute("Its name:", true))
             ->add('fileMainPicture',FileType::class, [
                 'multiple' => false,
                 'required' =>true,
@@ -47,7 +47,7 @@ class AddTrickType extends AbstractType
                 'expanded' => false,
                 'required'=> true
             ])
-            ->add('description', TextareaType::class, $this->setConfigurationAttribute("description", true))
+            ->add('description', TextareaType::class, $this->setConfigurationAttribute("Write a complete description here:", true))
             ->add('pictures', CollectionType::class, [
                     'entry_type' => PictureType::class,
                     'allow_add' => true,
@@ -58,7 +58,6 @@ class AddTrickType extends AbstractType
                 'allow_add' => true,
                 'allow_delete'=> true,
         ])
-
         ;
     }
 

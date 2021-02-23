@@ -1,7 +1,27 @@
-/* navbar style */
-body {
-    padding-bottom: 20px;
+/*main style*/
+.text-bold{
+    font-weight: bold;
 }
+
+.action-button {
+    background-color: #5fc39f;
+}
+
+.text-blue{
+    color:#4093aa;
+}
+
+span{
+    background-color: #e94569;
+    color:#ffffff;
+}
+
+.icons a{
+    font-size: 20px;
+    color:#788294;
+}
+
+/* navbar style */
 
 .navbar {
     background-color: #4093aa;
@@ -14,7 +34,7 @@ body {
 /* tricks list style */
 .main-banner {
     background-image: url("images/main-picture-snowtricks.png");
-    background-size: 100%;
+    background-size: cover;
     min-height: 800px;
 }
 
@@ -36,19 +56,22 @@ body {
     color: #e94569;
 }
 
-.action-button {
-    background-color: #5fc39f;
-}
-
 /* trick's details style */
-.trick-title {
-    background-repeat: no-repeat;
-    background-size: 100%;
+.trick-main {
+    background: no-repeat center, 100%;
     min-height: 500px;
 }
 
+.trick-title{
+    color:#22252a;
+}
+
+/*trick's description style*/
+.trick-description p{
+    text-align: justify;
+}
 /* comment style */
 .comment img {
-    width: 40px;
-    border-radius: 20px;
+    width: 80px;
+    border-radius: 100px;
 }
