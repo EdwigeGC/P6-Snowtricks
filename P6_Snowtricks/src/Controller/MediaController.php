@@ -29,6 +29,7 @@ class MediaController extends AbstractController
      */
     public function editPicture (Picture $picture, Request $request, Trick $tricks, ObjectManager $manager) :Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $form=$this->createForm(PictureType::class, $picture);
         $form->handleRequest($request);
 
@@ -73,6 +74,7 @@ class MediaController extends AbstractController
      */
     public function deletePicture(Picture $picture, ObjectManager $manager) :Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $manager->remove($picture);
         $manager->flush();
 
@@ -100,6 +102,7 @@ class MediaController extends AbstractController
      */
     public function editVideo (Request $request, Video $video, Trick $tricks, ObjectManager $manager): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $form=$this->createForm(VideoType::class, $video);
         $form->handleRequest($request);
 
@@ -135,7 +138,9 @@ class MediaController extends AbstractController
      * @param ObjectManager $manager
      * @return Response
      */
-    public function deleteVideo(Video $video, ObjectManager $manager){
+    public function deleteVideo(Video $video, ObjectManager $manager)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $manager->remove($video);
         $manager->flush();
 

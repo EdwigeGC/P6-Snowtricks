@@ -2,11 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="87a0ac05-253c-4696-8bd2-a3355867fcfa" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Service/Paginator.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/TricksController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/TricksController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/tricks/trickdetails.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tricks/trickdetails.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/tricks/tricksList.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tricks/tricksList.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -165,7 +162,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1613389904587</updated>
-      <workItem from="1613389905861" duration="83120000" />
+      <workItem from="1613389905861" duration="83947000" />
     </task>
     <servers />
   </component>

@@ -18,6 +18,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+
+/**
+ * Provides common features needed for Trick management.
+ *
+ * @author Edwige Genty
+ */
 class TricksController extends AbstractController
 {
     /**
@@ -110,6 +116,8 @@ class TricksController extends AbstractController
      */
     public function create (Request $request, FileUploader $fileUploader, ObjectManager $manager) :Response
     {
+
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $trick= new Trick();
         
         $form=$this->createForm(AddTrickType::class, $trick);
@@ -161,6 +169,7 @@ class TricksController extends AbstractController
      */
     public function delete(Trick $trick, ObjectManager $manager): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $manager->remove($trick);
         $manager->flush();
 
@@ -185,6 +194,7 @@ class TricksController extends AbstractController
      */
     public function edit(Trick $trick,Request $request, ObjectManager $manager):Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $form=$this->createForm(EditTrickType::class, $trick);
         $form->handleRequest($request);
 
