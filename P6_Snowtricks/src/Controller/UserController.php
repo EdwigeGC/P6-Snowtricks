@@ -113,6 +113,7 @@ class UserController extends AbstractController
      */
     public function profile(Request $request, ObjectManager $manager, FileUploader $fileUploader): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $user = $this->getUser();
 
         $form = $this->createForm(AccountType::class, $user);
@@ -160,6 +161,7 @@ class UserController extends AbstractController
      */
     public function resetPassword(Request $request, UserRepository $repository, string $userEmail, string $token, UserPasswordEncoderInterface $encoder, ObjectManager $manager)
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $user = $repository->findOneBy(['email' => $userEmail]);
         if ($token != null && $token === $user->getApiToken()) {
 
@@ -225,10 +227,8 @@ class UserController extends AbstractController
                     'success',
                     "If the Email is linked to an account, you will receive an Email to change your password."
                 );
-
                 return $this->redirectToRoute('home');
             }
-
             else{
                 $this->addFlash(
                     'success',
@@ -246,6 +246,8 @@ class UserController extends AbstractController
 
 
     /**
+     * Provides feature to change password for user registered and authenticated
+     *
      * @Route ("newPassword/asked/{user}", name="password_process")
      *
      * @param MailerInterface $mailer
@@ -257,6 +259,7 @@ class UserController extends AbstractController
      */
         public function passwordProcess (MailerInterface $mailer, User $user, Mail $mail, ObjectManager $manager) :Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $user->setApiToken(md5(random_bytes(10)));
         $manager->persist($user);
         $manager->flush();
