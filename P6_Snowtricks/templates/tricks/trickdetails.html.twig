@@ -4,68 +4,62 @@
 
 {% block body %}
 
-    <div class="trick container">
     <!--main image and trick's name-->
-        <div class="trick-title row py-lg-5" style="background-image:url({{ asset('uploads/tricks/'~ trick.mainPicture) }}">
-            <div class="col-lg-6 col-md-8 mx-auto">
-                <h1 class="title-article">{{ trick.name }}</h1>
-                <p class="lead-text">Join community of Snowtricks</p>
+    <div class="py-5 text-center container">
+        <div class="row py-lg-3 my-auto">
+            <div class="trick-main col-lg-12 col-md-12 mx-auto" style="background-image:url({{ asset('uploads/'~ trick.mainPicture) }}">
+                <p class="edit-btn text-end mx-lg-10">
                 {% if app.user %}
-                    <div class="btn-group">
-                        <a href="{{ path('edit_trick', {'id': trick.id}) }}" class="btn btn-primary"><i class="fas fa-pencil-alt"></i></a>
-                        <a href="{{ path('delete_trick', {'id': trick.id}) }}" class="btn btn-danger" onclick="return confirm('Do you really want to delete this trick?')"><i class="fas fa-trash-alt"></i></a>
-                    </div>
+                    <a href="{{ path('edit_trick', {'id': trick.id}) }}" class="btn btn-primary"><i class="fas fa-pencil-alt"></i></a>
+                    <a href="{{ path('delete_trick', {'id': trick.id}) }}" class="btn btn-danger" onclick="return confirm('Do you really want to delete this trick?')"><i class="fas fa-trash-alt"></i></a>
                 {% endif %}
+                </p>
+                <h1 class="trick-title">{{ trick.name }}</h1>
             </div>
         </div>
+    </div>
 
     <!--medias-->
-        <div class="media container">
-            <div class="row row-cols-4 my-2 py-2">
+    <div class="media container">
+        <div class="row row-cols-5 my-2 py-2">
 
-                {% for picture in trick.pictures %}
-                        <img src="{{ asset('uploads/tricks/'~ picture.fileName)}}" class="img-thumbnail" alt="{{ picture.title }}">
-                {% endfor %}
+            {% for picture in trick.pictures %}
+                    <img src="{{ asset('uploads/'~ picture.fileName)}}" class="img-thumbnail" alt="{{ picture.title }}">
+            {% endfor %}
 
-                {% for video in trick.videos %}
-                        <iframe width="560" height="315" src="{{ video.url }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                {% endfor %}
-            </div>
+            {% for video in trick.videos %}
+                    <iframe width="560" height="315" src="{{ video.url }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            {% endfor %}
         </div>
+    </div>
 
     <!--Trick's details-->
-        <div class="container">
-            <div class="row">
-                <div class= "col-md-10 mb-2">
-                    <h2> Description </h2>
-                    <p class="text-wrap">{{ trick.description }}</p>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class= "col-md-10">
-                    <span class="badge bg-secondary">{{ trick.category.name }}</span>
-                    <p>Author: {{ trick.user.username }}</p>
-                    <p>Créé le {{ trick.creationDate|date("d/m/Y à H:i:s") }} {{ trick.modificationDate is not empty ?  "mis à jour le " ~trick.modificationDate|date("d/m/Y à H:i:s") : "" }} </p>
-                </div>
+    <div class="py-5 trick-description container">
+        <div class="row">
+            <div class= "col-md-10 mb-lg-4 mx-auto">
+                <p class="text-wrap">{{ trick.description }}</p>
             </div>
         </div>
-        <hr>
+
+        <div class="row mt-5 text-center">
+            <div class= "col-md-10 d-flex justify-content-around">
+                <span class="badge">{{ trick.category.name }}</span>
+                <p class="text-blue">Author: {{ trick.user.username }}, le {{ trick.creationDate|date("d/m/Y à H:i:s") }}{{ trick.modificationDate is not empty ?  " | mis à jour le " ~trick.modificationDate|date("d/m/Y à H:i:s") : "" }} </p>
+            </div>
+        </div>
+    </div>
+    <hr>
+
     <!--chat room-->
-        <div>
-            <h2>Comments</h2>
+    <div class="py-5 mx-auto chat container">
+
             {% if app.user %}
                     <div class="mb-3">
                         {{ form_start(form) }}
-
                         {{ form_widget(form) }}
-
-                        <button class="btn btn-primary" type="submit">Publish</button>
-
+                        <button class="my-2 btn action-button" type="submit">Publish</button>
                         {{ form_end(form) }}
-
                     </div>
-
             {% else %}
                 <p>To let a comment please
                     <a href="{{ path('user_login') }}">sign in</a>
@@ -76,14 +70,19 @@
 
             <hr>
 
+        <h2>Comments</h2>
             {% if trick.comments|length >0 %}
                 {% for comment in trick.comments %}
-                    <div class="comment bg-light rounded mb-3">
-                        <p>{{ comment.user.username }}, le {{ comment.creationDate|date("d/m/Y à H:i:s") }}</p>
-                        <img src="{{ asset('uploads/profile/'~ comment.user.photo)}}" class="img-thumbnail rounded circle" alt="{{ comment.user.username }}">
-                        <blockquote>
-                            <p>{{ comment.content }}</p>
-                        </blockquote>
+                    <div class="row comment bg-light rounded mb-3">
+                        <div class="col-lg-1 my-auto">
+                            <img src="{{ asset('uploads/'~ comment.user.photo)}}" class="img-thumbnail" alt="{{ comment.user.username }}">
+                        </div>
+                        <div class="col-lg-11 text-start">
+                            <p class="text-bold">{{ comment.user.username }}, le {{ comment.creationDate|date("d/m/Y à H:i:s") }}</p>
+                            <blockquote>
+                                <p>{{ comment.content }}</p>
+                            </blockquote>
+                        </div>
                     </div>
                 {% endfor %}
             {% else %}

@@ -5,23 +5,39 @@
 
 {% block body %}
 <div class="container">
-    <h1 class="h3 mb-3 fw-normal">Add a new snowboard trick</h1>
+    <h1 class="h3 mb-3 py-5 px-5 fw-normal text-center">Add a new snowboard trick</h1>
 
     {{ form_start(form) }}
-    {{ form_row(form.name) }}
-    {{ form_row(form.fileMainPicture) }}
-    {{ form_row(form.category) }}
-    {{ form_row(form.description) }}
-    {{ form_row(form.pictures) }}
-    <div class="form-group">
-        <button type="button" id="add-picture" class="btn btn-secondary">Add a picture</button>
-    </div>
-    {{ form_row(form.videos) }}
-    <div class="form-group">
-        <button type="button" id="add-video" class="btn btn-secondary">Add a video</button>
+   <div class="row g-3">
+       <div class="col-lg-7">
+           {{ form_row(form.name) }}
+           {{ form_row(form.category) }}
+       </div>
+        <div class="col-lg-5 g-3 px-auto">
+            {{ form_row(form.fileMainPicture) }}
+        </div>
+   </div>
+    <div class="row">
+        <div class="col g-3">
+         {{ form_row(form.description) }}
+        </div>
     </div>
 
-    <button class="btn btn-primary" type="submit">Let's go</button>
+
+    <div class="row my-lg-5 bg-light">
+        <h2>Add medias</h2>
+            {{ form_row(form.pictures) }}
+            <div class="form-group">
+                <button type="button" id="add-picture" class="btn btn-secondary">Add a picture</button>
+            </div>
+             {{ form_row(form.videos) }}
+             <div class="form-group">
+                 <button type="button" id="add-video" class="btn btn-secondary">Add a video</button>
+             </div>
+
+    </div>
+
+    <button class="btn-lg btn action-button my-lg-3" type="submit">Let's go</button>
     {{ form_end(form) }}
 </div>
 {% endblock %}

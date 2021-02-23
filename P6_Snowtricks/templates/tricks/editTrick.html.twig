@@ -10,7 +10,8 @@
         {{ form_start(form) }}
 
         <!--main image and trick's name-->
-            <div class="container">
+        <div class="row g-3">
+            <div class="col-lg-7">
                 <h1>{{ form_row(form.name) }} </h1>
                 <p>Change the main picture</p>
                 <img src="{{ asset('uploads/tricks/'~ trick.mainPicture) }}">

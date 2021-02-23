@@ -7,6 +7,7 @@ use App\Entity\Trick;
 use App\Entity\Video;
 use App\Form\PictureType;
 use App\Form\VideoType;
+use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,22 +17,23 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class MediaController extends AbstractController
 {
     /**
+     * Edit a picture object
+     *
      * @Route ("/picture/edit/{id}/{tricks}", name="edit_picture")
      *
      * @param Trick $tricks
      * @param Picture $picture
      * @param Request $request
+     * @param ObjectManager $manager
      * @return Response
      */
-    public function editPicture (Picture $picture, Request $request, Trick $tricks) :Response
+    public function editPicture (Picture $picture, Request $request, Trick $tricks, ObjectManager $manager) :Response
     {
         $form=$this->createForm(PictureType::class, $picture);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){
-
                 $pictureFile = $picture->getFile();
-
             if( $pictureFile != null){
                 $pictureName = md5(uniqid()).'.'.$pictureFile->guessExtension();
                 //save it into public/uploads/tricks
@@ -42,21 +44,16 @@ class MediaController extends AbstractController
                 $picture->setTricks($tricks);
                 $picture->setFileName($pictureName);
             }
-
-            $manager = $this->getDoctrine()->getManager();
             $manager->persist($picture);
             $manager->flush();
-
             $this->addFlash(
                 'success',
                 "Picture edited!"
             );
-
             return $this->redirectToRoute('edit_trick',[
                 'id'=> $picture->getTricks()->getId(),
             ]);
         }
-
         return $this->render('media/editPicture.html.twig',[
             'form'=> $form->createView(),
             'picture'=> $picture,
@@ -66,15 +63,16 @@ class MediaController extends AbstractController
     }
 
     /**
-     * Delete a picture from the database
+     * Delete a Picture from the database
      *
      * @Route("/picture/delete/{id}", name="delete_picture")
      *
      * @param Picture $picture
+     * @param ObjectManager $manager
      * @return Response
      */
-    public function deletePicture(Picture $picture){
-        $manager = $this->getDoctrine()->getManager();
+    public function deletePicture(Picture $picture, ObjectManager $manager) :Response
+    {
         $manager->remove($picture);
         $manager->flush();
 
@@ -89,16 +87,18 @@ class MediaController extends AbstractController
     }
 
     /**
+     * Edit a video object
      *
      * @Route ("/video/edit/{id}/{tricks}", name="edit_video")
      *
-     * @param Trick $tricks
      * @param Request $request
      * @param Video $video
+     * @param Trick $tricks
+     * @param ObjectManager $manager
      *
      * @return Response
      */
-    public function editVideo (Request $request, Video $video, Trick $tricks): Response
+    public function editVideo (Request $request, Video $video, Trick $tricks, ObjectManager $manager): Response
     {
         $form=$this->createForm(VideoType::class, $video);
         $form->handleRequest($request);
@@ -106,7 +106,6 @@ class MediaController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()){
             $video->setTricks($tricks);
 
-            $manager = $this->getDoctrine()->getManager();
             $manager->persist($video);
             $manager->flush();
 
@@ -128,15 +127,15 @@ class MediaController extends AbstractController
     }
 
     /**
-     * Delete a video from the database
+     * Delete a Video from the database
      *
      * @Route("/video/delete/{id}", name="delete_video")
      *
      * @param Video $video
+     * @param ObjectManager $manager
      * @return Response
      */
-    public function deleteVideo(Video $video){
-        $manager = $this->getDoctrine()->getManager();
+    public function deleteVideo(Video $video, ObjectManager $manager){
         $manager->remove($video);
         $manager->flush();
 
