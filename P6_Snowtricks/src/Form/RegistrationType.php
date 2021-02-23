@@ -29,6 +29,8 @@ class RegistrationType extends AbstractType
         $builder
             ->add('username',TextType::class, $this->setConfigurationAttribute("Choose a username"))
             ->add('email',EmailType::class, $this->setConfigurationAttribute("Write your Email address"))
+            ->add('lastName', TextType::class,$this->setConfigurationAttribute("Your last name"))
+            ->add('firstName', TextType::class, $this->setConfigurationAttribute("Your first name"))
             ->add('password',PasswordType::class, $this->setConfigurationAttribute("Choose a password"))
         ;
     }
