@@ -7,7 +7,9 @@ use App\Entity\Comment;
 use App\Form\CommentType;
 use App\Form\AddTrickType;
 use App\Form\EditTrickType;
+use App\Repository\CommentRepository;
 use App\Repository\TrickRepository;
+use App\Service\Paginator;
 use App\Service\UploadsPicture;
 use Doctrine\Persistence\ObjectManager;
 use App\Service\FileUploader;
@@ -21,39 +23,51 @@ class TricksController extends AbstractController
     /**
      * Display home page of the website
      *
-     * @Route("/home", name="home")
-     * @Route("/")
+     * @Route("/home/{page<\d+>?1}", name="home")
+     * @Route("/{page<\d+>?1}")
      *
      * @param TrickRepository $repository
+     * @param integer $page
+     * @param Paginator $paginator
      *
      * @return Response
      */
-    public function home(TrickRepository $repository): Response
+    public function home(TrickRepository $repository, int $page, Paginator $paginator): Response
     {
-        $tricks= $repository->findAll();
+       $paginator   ->setEntityClass(Trick::class)
+                    ->setPage($page);
+
         return $this->render('tricks/tricksList.html.twig', [
             'controller_name' => 'TricksController',
-            'tricks' => $tricks,
+            'paginator' => $paginator
         ]);
     }
 
     /**
      * Display one trick's details
      *
-     * @Route("/trick/details/{id}", name="trick_details")
+     * @Route("/trick/details/{id}/{page<\d+>?1}", name="trick_details")
      *
      * @param integer $id
      * @param Request $request
      * @param TrickRepository $repository
+     * @param CommentRepository $commentRepository
      * @param ObjectManager $manager
+     * @param Paginator $paginator
+     * @param integer $page
      *
      * @return Response
      */
-    public function trickDetails($id, TrickRepository $repository, Request $request, ObjectManager $manager)
+    public function trickDetails($id, TrickRepository $repository, CommentRepository $commentRepository, Request $request, ObjectManager $manager, Paginator $paginator, int $page)
     {
         $trick= $repository->findOneById($id);
 
         //comments
+        $paginator  ->setEntityClass(Comment::class)
+            ->setPage($page)
+            ->setLimit(5);
+
+        //form to write abd save a comment
         $comment= new Comment();
         $form=$this->createForm(CommentType::class, $comment);
 
@@ -79,6 +93,7 @@ class TricksController extends AbstractController
         return $this->render('tricks/trickDetails.html.twig',[
             'form'=>$form->createView(),
             'trick' =>$trick,
+            'paginator' => $paginator
         ]);
     }
 

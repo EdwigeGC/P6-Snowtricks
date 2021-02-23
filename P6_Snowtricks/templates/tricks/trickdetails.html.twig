@@ -72,7 +72,7 @@
 
         <h2>Comments</h2>
             {% if trick.comments|length >0 %}
-                {% for comment in trick.comments %}
+                {% for comment in paginator.data %}
                     <div class="row comment bg-light rounded mb-3">
                         <div class="col-lg-1 my-auto">
                             <img src="{{ asset('uploads/'~ comment.user.photo)}}" class="img-thumbnail" alt="{{ comment.user.username }}">
@@ -85,6 +85,29 @@
                         </div>
                     </div>
                 {% endfor %}
+
+                <div class="d-flex justify-content-center">
+                    {% set page = paginator.page %}
+                    {% set pages = paginator.pages %}
+                    <ul class="pagination">
+                        <li class="page-item {% if page ==1 %}disabled{% endif %}">
+                            <a class="page-link" href="{{ path('trick_details', {'id':trick.id, 'page': page -1}) }}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        {%  for i in 1..pages %}
+                            <li class="page-item {% if page==i %}active{% endif %}">
+                                <a class="page-link" href="{{ path('trick_details', {'id':trick.id, 'page':i}) }}">{{ i }}</a>
+                            </li>
+                        {%  endfor %}
+                        <li class="page-item {% if page == pages %}disabled{% endif %}">
+                            <a class="page-link" href="{{ path('trick_details', {'id':trick.id,'page': page +1}) }}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
             {% else %}
                 <p>Be the first one to comment this trick !</p>
 

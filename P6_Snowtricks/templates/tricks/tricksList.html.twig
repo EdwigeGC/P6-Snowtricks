@@ -15,7 +15,7 @@
 
 <section class="tricks-list py-5 px-5">
   <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3" id="tricks">
-    {% for trick in tricks %}
+    {% for trick in paginator.data %}
     <div class="col">
       <div class="tricks card shadow-sm mx-3 mb-3">
         <img src="{{ asset('uploads/'~ trick.mainPicture)}}" class="img-thumbnail trick-thumbnail" alt="{{ trick.name }}">
@@ -39,9 +39,27 @@
     {% endfor %}
   </div>
 
-  {% if tricks|length >6 %}
-    <button class="btn action-button"><i class="fas fa-spinner"></i> Load more</button>
-  {% endif %}
+  <div class="d-flex justify-content-center">
+    {% set page = paginator.page %}
+    {% set pages = paginator.pages %}
+    <ul class="pagination">
+      <li class="page-item {% if page ==1 %}disabled{% endif %}">
+        <a class="page-link" href="{{ path('home', {'page': page -1}) }}" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      {%  for i in 1..pages %}
+      <li class="page-item {% if page==i %}active{% endif %}">
+        <a class="page-link" href="{{ path('home', {'page':i}) }}">{{ i }}</a>
+      </li>
+      {%  endfor %}
+      <li class="page-item {% if page == pages %}disabled{% endif %}">
+        <a class="page-link" href="{{ path('home', {'page': page +1}) }}" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </div>
 </section>
 </div>
 
