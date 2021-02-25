@@ -70,8 +70,9 @@ class TricksController extends AbstractController
 
         //comments
         $paginator  ->setEntityClass(Comment::class)
-            ->setPage($page)
-            ->setLimit(5);
+                    ->setPage($page)
+                    ->setLimit(5)
+                    ->setOrderBy(['creationDate' => 'desc']);
 
         //form to write abd save a comment
         $comment= new Comment();
@@ -116,7 +117,6 @@ class TricksController extends AbstractController
      */
     public function create (Request $request, FileUploader $fileUploader, ObjectManager $manager) :Response
     {
-
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $trick= new Trick();
         
