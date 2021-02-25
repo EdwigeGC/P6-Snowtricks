@@ -3,6 +3,8 @@
 This is a community blog related to Snowboard tricks. Users can manage the articles once they are created their account and log in. 
 It is made with Symfony framework without extern bundles.
 
+[![Maintainability](https://api.codeclimate.com/v1/badges/bd1406aaf0649a2cd1f9/maintainability)](https://codeclimate.com/github/EdwigeGC/P6-Snowtricks/maintainability)
+
 ## Getting started
 ### Prerequisites
 
@@ -22,9 +24,11 @@ Installation of the project, requires:
 
 ### Installation
  1. Copy the link on GitHub and clone it on your local repository
- 2. Install Composer: https://getcomposer.org/
- 3. Connect to MySQL in .env files
-
+ 2. Open your terminal and run composer install
+ 3. Create database: 
+  ```php bin/console doctrine:database:create```
+ 4. Open file .env end # customize this line:
+```DATABASE_URL="mysql://db_user:db_password@127.0.0.1:3306/db_name?serverVersion=5.7"```
 
 ## Features
 ### What can do all users
