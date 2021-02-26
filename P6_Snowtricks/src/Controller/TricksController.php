@@ -200,8 +200,7 @@ class TricksController extends AbstractController
 
         if ($form->isSubmitted() ){
 
-            $trick -> setModificationDate(new\ Datetime)
-                    ->setUser($this->getUser());
+            $trick -> setModificationDate(new\ Datetime);
 
             $manager->persist($trick);
             $manager->flush();
