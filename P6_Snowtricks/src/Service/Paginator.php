@@ -11,6 +11,7 @@ class Paginator{
     private $page = 1;
     private $manager;
     private $orderBy =[];
+    private $filterBy =[];
 
     public function __construct(ObjectManager $manager)
     {
@@ -30,7 +31,7 @@ class Paginator{
     {
         $offset= $this->page * $this->limit - $this->limit;
         $repository =$this->manager->getRepository($this->entityClass);
-        $data = $repository->findBy([],$this->orderBy, $this->limit, $offset);
+        $data = $repository->findBy($this->filterBy,$this->orderBy, $this->limit, $offset);
 
     return $data;
     }
@@ -75,9 +76,11 @@ class Paginator{
         return $this;
     }
 
-    public function getOrderBy()
+    public function setFilterBy($filterBy)
     {
-        return $this->orderBy;
+        $this->filterBy = $filterBy;
+        return $this;
     }
+
 
 }

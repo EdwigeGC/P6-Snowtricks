@@ -10,11 +10,11 @@
         {{ form_start(form) }}
 
         <!--main image and trick's name-->
-        <div class="row g-3">
+        <div class="row g-3 pb-5">
             <div class="col-lg-7">
                 <h1>{{ form_row(form.name) }} </h1>
                 <p>Change the main picture</p>
-                <img src="{{ asset('uploads/tricks/'~ trick.mainPicture) }}">
+                <img src="{{ asset('uploads/'~ trick.mainPicture) }}">
                     <div class="btn-group">
                         <a href="#" class="btn btn-primary"><i class="fas fa-pencil-alt"></i></a>
                         <a href="#" class="btn btn-danger" onclick="return confirm('Do you really want to delete this trick?')"><i class="fas fa-trash-alt"></i></a>
@@ -24,26 +24,27 @@
 
         <!--medias-->
 
-        <div class="container">
-            <div class="row row-cols-3 my-2 py-2">
-                {% for picture in trick.pictures %}
-                    <div class="d-flex">
-                        <img src="{{ asset('uploads/tricks/'~ picture.fileName)}}" class="img-thumbnail" alt="{{ picture.title }}">
-                        <div class="btn-group">
-                            <a href="{{ path('edit_picture', { 'id':picture.id, 'tricks': trick.id }) }}" class="btn btn-primary"><i class="fas fa-pencil-alt"></i></a>
-                            <a href="{{ path('delete_picture', {'id': picture.id}) }}" class="btn btn-danger" onclick="return confirm('Do you really want to delete this trick?')"><i class="fas fa-trash-alt"></i></a>
-                        </div>
+        <h3>Media</h3>
+        <div class="row row-cols-3">
+            {% for picture in trick.pictures %}
+                <div>
+                    <img src="{{ asset('uploads/'~ picture.fileName)}}" class="img-thumbnail" alt="{{ picture.title }}">
+                    <div class="btn-group">
+                        <a href="{{ path('edit_picture', { 'id':picture.id, 'tricks': trick.id }) }}" class="btn btn-primary"><i class="fas fa-pencil-alt"></i></a>
+                        <a href="{{ path('delete_picture', {'id': picture.id}) }}" class="btn btn-danger" onclick="return confirm('Do you really want to delete this trick?')"><i class="fas fa-trash-alt"></i></a>
                     </div>
-                {% endfor %}
+                </div>
+            {% endfor %}
 
-                {% for video in trick.videos %}
+            {% for video in trick.videos %}
+                <div>
                     <iframe width="560" height="315" src="{{ video.url }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     <div class="btn-group">
                         <a href="{{ path('edit_video', {'id': video.id, 'tricks': trick.id}) }}" class="btn btn-primary" ><i class="fas fa-pencil-alt"></i></a>
                         <a href="{{ path('delete_video', {'id': video.id}) }}" class="btn btn-danger" onclick="return confirm('Do you really want to delete this trick?')"><i class="fas fa-trash-alt"></i></a>
                     </div>
+                </div>
                 {% endfor %}
-            </div>
         </div>
 
         <!--description et category-->
