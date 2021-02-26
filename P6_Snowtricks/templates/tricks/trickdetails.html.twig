@@ -6,15 +6,23 @@
 
     <!--main image and trick's name-->
     <div class="py-5 text-center container">
+
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href={{ path('home') }}>Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ trick.name }}</li>
+            </ol>
+        </nav>
+
         <div class="row py-lg-3 my-auto">
-            <div class="trick-main col-lg-12 col-md-12 mx-auto" style="background-image:url({{ asset('uploads/'~ trick.mainPicture) }}">
+            <div class="trick-main col-lg-12 col-md-12 mx-auto my-auto" style="background-image:url({{ asset('uploads/'~ trick.mainPicture) }}">
+                <h1 class="trick-title">{{ trick.name }}</h1>
                 <p class="edit-btn text-end mx-lg-10">
                 {% if app.user %}
                     <a href="{{ path('edit_trick', {'id': trick.id}) }}" class="btn btn-primary"><i class="fas fa-pencil-alt"></i></a>
                     <a href="{{ path('delete_trick', {'id': trick.id}) }}" class="btn btn-danger" onclick="return confirm('Do you really want to delete this trick?')"><i class="fas fa-trash-alt"></i></a>
                 {% endif %}
                 </p>
-                <h1 class="trick-title">{{ trick.name }}</h1>
             </div>
         </div>
     </div>

@@ -4,8 +4,16 @@
 {% form_theme form _self %}
 
 {% block body %}
-<div class="container">
-    <h1 class="h3 mb-3 py-5 px-5 fw-normal text-center">Add a new snowboard trick</h1>
+<div class="container py-5">
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href={{ path('home') }}>Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">New trick</li>
+        </ol>
+    </nav>
+
+    <h1 class="mb-3 py-5">Add a new snowboard trick</h1>
 
     {{ form_start(form) }}
    <div class="row g-3">
@@ -25,7 +33,7 @@
 
 
     <div class="row my-lg-5 bg-light">
-        <h2>Add medias</h2>
+        <h3>Add medias</h3>
             {{ form_row(form.pictures) }}
             <div class="form-group">
                 <button type="button" id="add-picture" class="btn btn-secondary">Add a picture</button>
@@ -36,8 +44,9 @@
              </div>
 
     </div>
-
-    <button class="btn-lg btn action-button my-lg-3" type="submit">Let's go</button>
+    <div class="py-3 d-grid gap-2 col-3">
+        <button class="btn-lg btn action-button my-lg-3" type="submit">Let's go</button>
+    </div>
     {{ form_end(form) }}
 </div>
 {% endblock %}

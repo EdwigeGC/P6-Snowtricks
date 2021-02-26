@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\VideoRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=VideoRepository::class)
@@ -23,6 +24,11 @@ class Video
     private $title;
 
     /**
+     * @Assert\Regex(
+     *     pattern="#^https:\/\/[a-z0-9._-]+\.[a-z]{2,4}/embed/#",
+     *     match=true,
+     *     message="Your url must contain /embed"
+     * )
      * @ORM\Column(type="string", length=255)
      */
     private $url;
