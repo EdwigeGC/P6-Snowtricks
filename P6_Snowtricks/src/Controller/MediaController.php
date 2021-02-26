@@ -7,6 +7,7 @@ use App\Entity\Trick;
 use App\Entity\Video;
 use App\Form\PictureType;
 use App\Form\VideoType;
+use App\Service\FileUploader;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,9 +26,11 @@ class MediaController extends AbstractController
      * @param Picture $picture
      * @param Request $request
      * @param ObjectManager $manager
+     * @param FileUploader $fileUploader
+     *
      * @return Response
      */
-    public function editPicture (Picture $picture, Request $request, Trick $tricks, ObjectManager $manager) :Response
+    public function editPicture (Picture $picture, Request $request, Trick $tricks, ObjectManager $manager,FileUploader $fileUploader) :Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $form=$this->createForm(PictureType::class, $picture);
@@ -36,14 +39,8 @@ class MediaController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()){
                 $pictureFile = $picture->getFile();
             if( $pictureFile != null){
-                $pictureName = md5(uniqid()).'.'.$pictureFile->guessExtension();
-                //save it into public/uploads/tricks
-                $pictureFile->move(
-                    $this->getParameter('pictures_directory').'/tricks',
-                    $pictureName
-                );
-                $picture->setTricks($tricks);
-                $picture->setFileName($pictureName);
+                $picture    ->setFileName($fileUploader->upload($pictureFile))
+                            ->setTricks($tricks);
             }
             $manager->persist($picture);
             $manager->flush();

@@ -73,7 +73,7 @@
         <h2>Comments</h2>
             {% if trick.comments|length >0 %}
                 {% for comment in paginator.data %}
-                    <div class="row comment bg-light rounded mb-3">
+                    <div class="row profile bg-light rounded mb-3">
                         <div class="col-lg-1 my-auto">
                             <img src="{{ asset('uploads/'~ comment.user.photo)}}" class="img-thumbnail" alt="{{ comment.user.username }}">
                         </div>

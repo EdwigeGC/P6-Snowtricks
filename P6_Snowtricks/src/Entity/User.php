@@ -79,7 +79,7 @@ class User implements UserInterface
     private $validated;
 
     /**
-     * @ORM\OneToMany(targetEntity=Trick::class, mappedBy="user")
+     * @ORM\OneToMany(targetEntity=Trick::class, mappedBy="user",orphanRemoval=true)
      */
     private $tricks;
 

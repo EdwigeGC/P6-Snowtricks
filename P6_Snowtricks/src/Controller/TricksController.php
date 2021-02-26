@@ -72,7 +72,8 @@ class TricksController extends AbstractController
         $paginator  ->setEntityClass(Comment::class)
                     ->setPage($page)
                     ->setLimit(5)
-                    ->setOrderBy(['creationDate' => 'desc']);
+                    ->setOrderBy(['creationDate' => 'desc'])
+                    ->setFilterBy(['tricks'=>$id]);
 
         //form to write abd save a comment
         $comment= new Comment();
@@ -135,8 +136,8 @@ class TricksController extends AbstractController
             }
             //pictures
             foreach ($trick->getPictures() as $picture) {
-                $picture->setFileName($fileUploader->upload($picture->getFile()))
-                    ->setTricks($trick);
+                $picture    ->setFileName($fileUploader->upload($picture->getFile()))
+                            ->setTricks($trick);
             }
             //videos
             foreach ($trick->getVideos() as $video){

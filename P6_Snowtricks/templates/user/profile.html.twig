@@ -4,27 +4,36 @@
 
 {% block body %}
 
-    <div class="container">
-        <h1 class="h3 mb-3 fw-normal">Change information into your account</h1>
 
-        {{ form_start(form) }}
+    <div class="container py-5">
+        <h1 class="h3 mb-3 text-center">Change your information</h1>
+        <div class="row profile bg-light rounded mb-3">
+            {{ form_start(form) }}
+            <div class="col-lg-1 my-3 mx-auto">
+                {% if user.photo is not null %}
+                        <img src="{{ asset('uploads/'~ user.photo)}}" class="img-thumbnail" alt="profile picture">
+                {% endif %}
+            </div>
+            <div class="col-lg-11 text-start g-3">
+                {{ form_row(form.lastName) }}
+                {{ form_row(form.firstName) }}
+            </div>
+            <div class="row py-3">
+                <div class="col">
+                    {{ form_row(form.file) }}
+                </div>
+            </div>
 
-        {{ form_row(form.lastName) }}
-        {{ form_row(form.firstName) }}
-        <div>
             <a href="{{ path('password_process', {'user':app.user.id}) }}">Update your password</a>
-        </div>
-
-        {% if user.photo is not null %}
-        <div>
-            <img src="{{ asset('uploads/'~ user.photo)}}" class="img-thumbnail" alt="profile picture">
-        </div>
-        {% endif %}
-        {{ form_row(form.file) }}
-
-        <button class="btn btn-primary" type="submit">Validate</button>
+            <div class="row">
+                <div class="d-grid gap-2 col-4 mx-auto">
+                    <button class="btn btn-primary btn-lg" type="submit">Validate</button>
+                </div>
+            </div>
 
         {{ form_end(form) }}
+        </div>
+
     </div>
 
 {% endblock %}

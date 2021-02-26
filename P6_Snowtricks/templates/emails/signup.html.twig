@@ -1,10 +1,10 @@
 <h1>Welcome {{ email.toName }}!</h1>
 
 <p>
-    You signed up as {{ username }} with the following email:
+    You signed up with the following email:
 </p>
 <p><code>{{ email.to[0].address }}</code></p>
 
 <p>
-    <a href={{ url ('check_registration', {'username':username,'token':token}) }}>Click here to activate your account</a>
+    <a href={{ url ('check_registration', {'userEmail':userEmail,'token':token}) }}>Click here to activate your account</a>
 </p>
