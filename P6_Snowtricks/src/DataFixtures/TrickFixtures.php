@@ -10,7 +10,6 @@ class TrickFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
-
         for ($i = 1; $i <= 10; $i++) {
             $trick= new Trick();
             $trick  ->setName("Trick n°$i")
@@ -20,6 +19,5 @@ class TrickFixtures extends Fixture
             $manager->persist($trick);
         }
         $manager->flush();
-
     }
 }

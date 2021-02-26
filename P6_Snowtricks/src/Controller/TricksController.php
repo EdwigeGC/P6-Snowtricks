@@ -32,13 +32,12 @@ class TricksController extends AbstractController
      * @Route("/home/{page<\d+>?1}", name="home")
      * @Route("/{page<\d+>?1}")
      *
-     * @param TrickRepository $repository
      * @param integer $page
      * @param Paginator $paginator
      *
      * @return Response
      */
-    public function home(TrickRepository $repository, int $page, Paginator $paginator): Response
+    public function home(int $page, Paginator $paginator): Response
     {
        $paginator   ->setEntityClass(Trick::class)
                     ->setPage($page);
@@ -200,8 +199,7 @@ class TricksController extends AbstractController
 
         if ($form->isSubmitted() ){
 
-            $trick -> setModificationDate(new\ Datetime)
-                    ->setUser($this->getUser());
+            $trick -> setModificationDate(new\ Datetime);
 
             $manager->persist($trick);
             $manager->flush();
