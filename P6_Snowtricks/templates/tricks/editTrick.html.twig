@@ -29,7 +29,7 @@
 
         <div class="album py-5 bg-light">
             <div class="container">
-
+                <h2>Media</h2>
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3">
                     {% for picture in trick.pictures %}
                     <div class="col">
@@ -53,13 +53,11 @@
                     {% endfor %}
                 </div>
             </div>
-
-            <div class="d-flex flex-column py-3 justify-content-md-center">
+        </div>
+            <div class="col-lg-2 d-flex flex-column py-3 justify-content-md-center">
                 <a href="{{ path('new_picture', {'tricks':trick.id}) }}" class="btn action-button mb-3"><i class="fas fa-plus-square"> Add a picture</i></a>
                 <a href="{{ path('new_video', {'tricks':trick.id}) }}" class="btn action-button"><i class="fas fa-plus-square"> Add a video</i></a>
             </div>
-
-        </div>
     </section>
 
 

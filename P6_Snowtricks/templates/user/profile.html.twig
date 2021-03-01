@@ -4,6 +4,12 @@
 
 {% block body %}
 
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb px-3 py-3">
+            <li class="breadcrumb-item"><a href={{ path('home') }}>Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Account</li>
+        </ol>
+    </nav>
 
     <div class="container py-5">
         <h1 class="h3 mb-3 text-center">Change your information</h1>

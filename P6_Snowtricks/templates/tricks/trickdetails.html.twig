@@ -4,8 +4,6 @@
 
 {% block body %}
 
-    <!--main image and trick's name-->
-
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb px-3 py-3">
             <li class="breadcrumb-item"><a href={{ path('home') }}>Home</a></li>
@@ -13,6 +11,7 @@
         </ol>
     </nav>
 
+    <!--main image and trick's name-->
     <section class="main-picture py-3 text-center container position-relative">
         <div class="trick-main py-lg-5" style="background-image:url({{ asset('uploads/'~ trick.mainPicture) }}">
             <div class="col-lg-6 col-md-8 mx-auto">
@@ -34,7 +33,7 @@
         <div class="album py-5 bg-light">
             <div class="container">
 
-                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3">
                     {% for picture in trick.pictures %}
                             <img src="{{ asset('uploads/'~ picture.fileName)}}" class="img-thumbnail trick-thumbnail" alt="{{ picture.title }}">
                     {% endfor %}
@@ -91,7 +90,7 @@
                             <img src="{{ asset('uploads/'~ comment.user.photo)}}" class="img-thumbnail" alt="{{ comment.user.username }}">
                         </div>
                         <div class="col-lg-11 text-start">
-                            <p class="text-bold">{{ comment.user.username }}, le {{ comment.creationDate|date("d/m/Y à H:i:s") }}</p>
+                            <p class="text-bold">{{ trick.user.firstName}} {{ trick.user.lastName}}, le {{ comment.creationDate|date("d/m/Y à H:i:s") }}</p>
                             <blockquote>
                                 <p>{{ comment.content }}</p>
                             </blockquote>

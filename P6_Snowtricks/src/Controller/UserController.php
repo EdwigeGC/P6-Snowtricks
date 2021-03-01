@@ -146,7 +146,7 @@ class UserController extends AbstractController
 
     }
 
-     /** Provides form to create a new password
+     /** Provides form to renew forgot password
      *
      * @Route ("/password/new/{userEmail}/{token}", name="reset_password")
      *
