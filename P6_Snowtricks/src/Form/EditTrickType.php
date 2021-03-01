@@ -24,8 +24,8 @@ class EditTrickType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class)
-            ->add('description', TextareaType::class, $this->setConfigurationAttribute("description", true))
+            ->add('name', TextType::class, $this->setConfigurationAttribute("What's its name?", true))
+            ->add('description', TextareaType::class, $this->setConfigurationAttribute("Write a description", true))
             ->add('category', EntityType::class, [
                 'label' => "Choose a category",
                 'class' => Category::class,

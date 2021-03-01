@@ -3,70 +3,88 @@
 {% block title %}Edit a trick{% endblock %}
 
 {% block body %}
-    <!--main container-->
-    <div class="container">
 
-        <!--main image and trick's name-->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb px-3 py-3">
+            <li class="breadcrumb-item"><a href="{{ path('trick_details', {'id': trick.id}) }}" onclick="return confirm('The modifications won\'t be saved, are you sure to leave this page?')">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Edit: {{ trick.name }}</li>
+        </ol>
+    </nav>
+
         {{ form_start(form) }}
 
         <!--main image and trick's name-->
-        <div class="row g-3 pb-5">
-            <div class="col-lg-7">
-                <h1>{{ form_row(form.name) }} </h1>
-                <p>Change the main picture</p>
-                <img src="{{ asset('uploads/'~ trick.mainPicture) }}">
-                    <div class="btn-group">
-                        <a href="#" class="btn btn-primary"><i class="fas fa-pencil-alt"></i></a>
-                        <a href="#" class="btn btn-danger" onclick="return confirm('Do you really want to delete this trick?')"><i class="fas fa-trash-alt"></i></a>
-                    </div>
+    <section class="py-3 text-center container position-relative">
+        <div class="trick-main py-lg-5" style="background-image:url({{ asset('uploads/'~ trick.mainPicture) }}">
+            <div class="col-lg-6 col-md-8 mx-auto">
+                <h1 class="position-absolute top-50 start-50 translate-middle">{{ form_row(form.name) }}</h1>
             </div>
         </div>
+    </section>
+
+
 
         <!--medias-->
+    <section class="media">
 
-        <h3>Media</h3>
-        <div class="row row-cols-3">
-            {% for picture in trick.pictures %}
-                <div>
-                    <img src="{{ asset('uploads/'~ picture.fileName)}}" class="img-thumbnail" alt="{{ picture.title }}">
-                    <div class="btn-group">
-                        <a href="{{ path('edit_picture', { 'id':picture.id, 'tricks': trick.id }) }}" class="btn btn-primary"><i class="fas fa-pencil-alt"></i></a>
-                        <a href="{{ path('delete_picture', {'id': picture.id}) }}" class="btn btn-danger" onclick="return confirm('Do you really want to delete this trick?')"><i class="fas fa-trash-alt"></i></a>
-                    </div>
-                </div>
-            {% endfor %}
+        <div class="album py-5 bg-light">
+            <div class="container">
 
-            {% for video in trick.videos %}
-                <div>
-                    <iframe width="560" height="315" src="{{ video.url }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    <div class="btn-group">
-                        <a href="{{ path('edit_video', {'id': video.id, 'tricks': trick.id}) }}" class="btn btn-primary" ><i class="fas fa-pencil-alt"></i></a>
-                        <a href="{{ path('delete_video', {'id': video.id}) }}" class="btn btn-danger" onclick="return confirm('Do you really want to delete this trick?')"><i class="fas fa-trash-alt"></i></a>
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3">
+                    {% for picture in trick.pictures %}
+                    <div class="col">
+                        <div class="card shadow-sm mx-3 mb-3">
+                            <img src="{{ asset('uploads/'~ picture.fileName)}}" class="img-thumbnail" alt="{{ picture.title }}">
+                            <div class="card-body">
+                                <a href="{{ path('edit_picture', {'tricks': trick.id,'id':picture.id,  }) }}" class="btn btn-primary"><i class="fas fa-pencil-alt"></i></a>
+                                <a href="{{ path('delete_picture', {'id': picture.id}) }}" class="btn btn-danger" onclick="return confirm('Do you really want to delete this trick?')"><i class="fas fa-trash-alt"></i></a>
+                            </div>
+                        </div>
                     </div>
+                    {% endfor %}
+                    {% for video in trick.videos %}
+                    <div class="col">
+                        <div class="card shadow-sm mx-3 mb-3">
+                            <iframe src="{{ video.url }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            <div class="card-body">
+                                <a href="{{ path('edit_video', {'id': video.id, 'tricks': trick.id}) }}" class="btn btn-primary" ><i class="fas fa-pencil-alt"></i></a>
+                                <a href="{{ path('delete_video', {'id': video.id}) }}" class="btn btn-danger" onclick="return confirm('Do you really want to delete this trick?')"><i class="fas fa-trash-alt"></i></a>
+                            </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
+            </div>
+
+            <div class="d-flex flex-column py-3 justify-content-md-center">
+                <a href="{{ path('new_picture', {'tricks':trick.id}) }}" class="btn action-button mb-3"><i class="fas fa-plus-square"> Add a picture</i></a>
+                <a href="{{ path('new_video', {'tricks':trick.id}) }}" class="btn action-button"><i class="fas fa-plus-square"> Add a video</i></a>
+            </div>
+
         </div>
+    </section>
+
 
         <!--description et category-->
-        <div class="container">
 
-            <div class="row">
-                <div class= "col-md-10">
-                    <h2> Description </h2>
-                    {{ form_row(form.description) }}
-                </div>
-            </div>
-
-            <div class="row">
-                <div class= "col-md-10">
-                    {{ form_row(form.category) }}
-                </div>
+    <div class="py-5 trick-description container">
+        <div class="row">
+            <div class= "col-md-10 mb-lg-4 mx-auto">
+                {{ form_row(form.description) }}
             </div>
         </div>
 
-        <div class="col-2">
-            <button class="btn btn-primary" type="submit">Save</button>
-            <button class="btn btn-danger" type="button" href="{{ path('delete_trick', {'id': trick.id}) }}" onclick="return confirm('Do you really want to delete this trick?')">Delete</button>
+        <div class="row">
+            <div class= "col-md-10 mb-lg-4 mx-auto">
+                {{ form_row(form.category) }}
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="col-md-2 d-grid gap-2 col-sm-6 mx-auto">
+                <button class="btn btn-primary btn-lg" type="submit">Save</button>
+                <button class="btn btn-danger btn-lg" type="button" href="{{ path('delete_trick', {'id': trick.id}) }}" onclick="return confirm('Do you really want to delete this trick?')">Delete</button>
+            </div>
         </div>
     </div>
 

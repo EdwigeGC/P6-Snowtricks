@@ -15,6 +15,7 @@ class CommentType extends AbstractType
         $builder
             ->add('content', TextType:: class, [
                     'label'=>'Write your comment here:',
+                    'required'=> true
             ])
         ;
     }
