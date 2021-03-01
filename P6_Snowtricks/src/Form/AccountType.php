@@ -22,7 +22,7 @@ class AccountType extends AbstractType
             ])
             ->add('file', FileType::class, [
                 'multiple' => false,
-                'label'=>'Add or change your user profile:',
+                'label'=>'Add or change your avatar:',
                 'required' =>false
             ])
         ;

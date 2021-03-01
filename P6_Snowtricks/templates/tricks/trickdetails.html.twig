@@ -5,41 +5,46 @@
 {% block body %}
 
     <!--main image and trick's name-->
-    <div class="py-5 text-center container">
 
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href={{ path('home') }}>Home</a></li>
-                <li class="breadcrumb-item active" aria-current="page">{{ trick.name }}</li>
-            </ol>
-        </nav>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb px-3 py-3">
+            <li class="breadcrumb-item"><a href={{ path('home') }}>Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ trick.name }}</li>
+        </ol>
+    </nav>
 
-        <div class="row py-lg-3 my-auto">
-            <div class="trick-main col-lg-12 col-md-12 mx-auto my-auto" style="background-image:url({{ asset('uploads/'~ trick.mainPicture) }}">
-                <h1 class="trick-title">{{ trick.name }}</h1>
-                <p class="edit-btn text-end mx-lg-10">
-                {% if app.user %}
-                    <a href="{{ path('edit_trick', {'id': trick.id}) }}" class="btn btn-primary"><i class="fas fa-pencil-alt"></i></a>
-                    <a href="{{ path('delete_trick', {'id': trick.id}) }}" class="btn btn-danger" onclick="return confirm('Do you really want to delete this trick?')"><i class="fas fa-trash-alt"></i></a>
-                {% endif %}
+    <section class="main-picture py-3 text-center container position-relative">
+        <div class="trick-main py-lg-5" style="background-image:url({{ asset('uploads/'~ trick.mainPicture) }}">
+            <div class="col-lg-6 col-md-8 mx-auto">
+                <p class="float-end">
+                    {% if app.user %}
+                        <a href="{{ path('edit_trick', {'id': trick.id}) }}" class="btn btn-primary my-2"><i class="fas fa-pencil-alt"></i></a>
+                        <a href="{{ path('delete_trick', {'id': trick.id}) }}" class="btn btn-danger my-2" onclick="return confirm('Do you really want to delete this trick?')"><i class="fas fa-trash-alt"></i></a>
+                    {% endif %}
                 </p>
+                <h1 class="trick-title position-absolute  top-50 start-50 translate-middle">{{ trick.name }}</h1>
             </div>
         </div>
-    </div>
+    </section>
+
 
     <!--medias-->
-    <div class="media container">
-        <div class="row row-cols-5 my-2 py-2">
+    <section class="media">
 
-            {% for picture in trick.pictures %}
-                    <img src="{{ asset('uploads/'~ picture.fileName)}}" class="img-thumbnail" alt="{{ picture.title }}">
-            {% endfor %}
+        <div class="album py-5 bg-light">
+            <div class="container">
 
-            {% for video in trick.videos %}
-                    <iframe width="560" height="315" src="{{ video.url }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            {% endfor %}
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                    {% for picture in trick.pictures %}
+                            <img src="{{ asset('uploads/'~ picture.fileName)}}" class="img-thumbnail trick-thumbnail" alt="{{ picture.title }}">
+                    {% endfor %}
+                    {% for video in trick.videos %}
+                            <iframe width="420" height="394" src="{{ video.url }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
 
     <!--Trick's details-->
     <div class="py-5 trick-description container">
@@ -49,7 +54,7 @@
             </div>
         </div>
 
-        <div class="row mt-5 text-center">
+        <div class="row mt-5 justify-content-md-center">
             <div class= "col-md-10 d-flex justify-content-around">
                 <span class="badge">{{ trick.category.name }}</span>
                 <p class="text-blue">Author: {{ trick.user.username }}, le {{ trick.creationDate|date("d/m/Y à H:i:s") }}{{ trick.modificationDate is not empty ?  " | mis à jour le " ~trick.modificationDate|date("d/m/Y à H:i:s") : "" }} </p>

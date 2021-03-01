@@ -2,17 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e4ebd7e2-efb6-440a-b40b-8eb64d1df133" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/MediaController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/MediaController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Video.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Video.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Form/CommentType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/CommentType.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Form/RegistrationType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/RegistrationType.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Form/AccountType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/AccountType.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Form/EditTrickType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/EditTrickType.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/base.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/tricks/addTrick.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tricks/addTrick.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/tricks/editTrick.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tricks/editTrick.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/tricks/trickdetails.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tricks/trickdetails.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/tricks/tricksList.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/tricks/tricksList.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/user/profile.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/user/profile.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -159,11 +158,21 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1614332210881</updated>
-      <workItem from="1614332213390" duration="12982000" />
+      <workItem from="1614332213390" duration="29820000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/templates/tricks/trickdetails.html.twig</url>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
