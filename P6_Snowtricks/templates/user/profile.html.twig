@@ -4,26 +4,42 @@
 
 {% block body %}
 
-    <div class="container">
-        <h1 class="h3 mb-3 fw-normal">Change information into your account</h1>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb px-3 py-3">
+            <li class="breadcrumb-item"><a href={{ path('home') }}>Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Account</li>
+        </ol>
+    </nav>
 
-        {{ form_start(form) }}
+    <div class="container py-5">
+        <h1 class="h3 mb-3 text-center">Change your information</h1>
+        <div class="row profile bg-light rounded mb-3">
+            {{ form_start(form) }}
+            <div class="row d-flex justify-content-around">
+                <div class="col-lg-6">
+                    {% if user.photo is not null %}
+                        <img src="{{ asset('uploads/'~ user.photo)}}" class="img-thumbnail" alt="profile picture">
+                    {% endif %}
+                </div>
+                <div class="col-lg-6">
+                    {{ form_row(form.file) }}
+                </div>
+            </div>
 
-        {{ form_row(form.lastName) }}
-        {{ form_row(form.firstName) }}
-        <div>
-            <a href="{{ path('password_process', {'user':app.user.id}) }}">Update your password</a>
+            <div class="col-lg-11 text-start py-3 g-3">
+                {{ form_row(form.lastName) }}
+                {{ form_row(form.firstName) }}
+            </div>
+            <div class="row py-5">
+                <a href="{{ path('password_process', {'user':app.user.id}) }}">Update your password</a>
+            </div>
+
         </div>
-
-        {% if user.photo is not null %}
-        <div>
-            <img src="{{ asset('uploads/'~ user.photo)}}" class="img-thumbnail" alt="profile picture">
+        <div class="row">
+            <div class="d-grid gap-2 col-4 mx-auto">
+                <button class="btn action-button btn-lg" type="submit">Validate</button>
+            </div>
         </div>
-        {% endif %}
-        {{ form_row(form.file) }}
-
-        <button class="btn btn-primary" type="submit">Validate</button>
-
         {{ form_end(form) }}
     </div>
 

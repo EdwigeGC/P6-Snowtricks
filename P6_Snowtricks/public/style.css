@@ -1,4 +1,19 @@
 /*main style*/
+
+@font-face {
+    font-family: 'Permanent_Marker';
+    src: url('font/Permanent_Marker/PermanentMarker-Regular.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('font/Roboto/Roboto-Regular.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
 .text-bold{
     font-weight: bold;
 }
@@ -11,7 +26,7 @@
     color:#4093aa;
 }
 
-span{
+.badge{
     background-color: #e94569;
     color:#ffffff;
 }
@@ -22,7 +37,6 @@ span{
 }
 
 /* navbar style */
-
 .navbar {
     background-color: #4093aa;
 }
@@ -32,6 +46,16 @@ span{
 }
 
 /* tricks list style */
+.main-title{
+    color:#22252a;
+    font-family: "Permanent_Marker", Arial, Helvetica, sans-serif;
+}
+
+.lead-text{
+    color:#22252a;
+    font-family: "Roboto", Arial, Helvetica, sans-serif;
+}
+
 .main-banner {
     background-image: url("images/main-picture-snowtricks.png");
     background-size: cover;
@@ -50,6 +74,8 @@ span{
     color: #4093aa;
     text-decoration: none;
     font-size: 25px;
+    font-family: "Roboto", Arial, Helvetica, sans-serif;
+
 }
 
 .tricks a:hover {
@@ -58,20 +84,31 @@ span{
 
 /* trick's details style */
 .trick-main {
-    background: no-repeat center, 100%;
-    min-height: 500px;
+    background: no-repeat center, 100% ;
+    height: 600px;
+    background-size: cover;
+    display: block;
 }
 
-.trick-title{
-    color:#22252a;
+.trick-title {
+    color: #e94569;
+    font-size: 80px;
+    font-family: "Roboto", Arial, Helvetica, sans-serif;
+}
+
+.album card {
+    width: 450px;
+    height:250px;
 }
 
 /*trick's description style*/
-.trick-description p{
+.trick-description p {
     text-align: justify;
 }
+
 /* comment style */
-.comment img {
+.profile img {
     width: 80px;
-    border-radius: 100px;
+    height:auto;
+    border-radius: 50%;
 }

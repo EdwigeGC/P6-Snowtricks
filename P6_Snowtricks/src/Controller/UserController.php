@@ -75,18 +75,18 @@ class UserController extends AbstractController
     * Validates registration with email confirmation
     *
     * @param UserRepository $repository
-    * @param string $username
+    * @param string $userEmail
     * @param string $token
     * @param ObjectManager $manager
     *
     * @return Response
     *
-    * @Route("/check-registration/{username}/{token}", name="check_registration")
+    * @Route("/check-registration/{userEmail}/{token}", name="check_registration")
     */
-    public function checkRegistration(UserRepository $repository, string $username, string $token, ObjectManager $manager):Response
+    public function checkRegistration(UserRepository $repository, string $userEmail, string $token, ObjectManager $manager):Response
     {
        
-        $user= $repository->findOneBy(['username'=> $username]);
+        $user= $repository->findOneBy(['email'=> $userEmail]);
         if ($token != null && $token == $user->getApiToken()){
             $user->setValidated(true);
             $user->setApiToken(null);
@@ -146,7 +146,7 @@ class UserController extends AbstractController
 
     }
 
-     /** Provides form to create a new password
+     /** Provides form to renew forgot password
      *
      * @Route ("/password/new/{userEmail}/{token}", name="reset_password")
      *

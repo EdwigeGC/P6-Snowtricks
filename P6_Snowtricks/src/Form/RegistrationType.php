@@ -21,17 +21,18 @@ class RegistrationType extends AbstractType
     public function setConfigurationAttribute($label){
         return[
             'label'=>$label,
+            'required'=> true
             ];
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('username',TextType::class, $this->setConfigurationAttribute("Choose a username"))
-            ->add('email',EmailType::class, $this->setConfigurationAttribute("Write your Email address"))
-            ->add('lastName', TextType::class,$this->setConfigurationAttribute("Your last name"))
-            ->add('firstName', TextType::class, $this->setConfigurationAttribute("Your first name"))
-            ->add('password',PasswordType::class, $this->setConfigurationAttribute("Choose a password"))
+            ->add('username',TextType::class, $this->setConfigurationAttribute("Choose a username", true))
+            ->add('email',EmailType::class, $this->setConfigurationAttribute("Write your Email address", true))
+            ->add('lastName', TextType::class,$this->setConfigurationAttribute("Your last name", true))
+            ->add('firstName', TextType::class, $this->setConfigurationAttribute("Your first name",true))
+            ->add('password',PasswordType::class, $this->setConfigurationAttribute("Choose a password", true))
         ;
     }
 

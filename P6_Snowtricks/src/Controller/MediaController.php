@@ -7,6 +7,7 @@ use App\Entity\Trick;
 use App\Entity\Video;
 use App\Form\PictureType;
 use App\Form\VideoType;
+use App\Service\FileUploader;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,17 +18,58 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class MediaController extends AbstractController
 {
     /**
+     * @Route ("/picture/addPicture/{tricks}", name="new_picture")
+     *
+     * @param Request $request
+     * @param Trick $tricks
+     * @param ObjectManager $manager
+     * @param FileUploader $fileUploader
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     */
+    public function addPicture(Request $request, Trick $tricks, ObjectManager $manager, FileUploader $fileUploader): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $picture= new Picture();
+        $form=$this->createForm(PictureType::class, $picture);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $pictureFile = $picture->getFile();
+            if( $pictureFile != null){
+                $picture    ->setFileName($fileUploader->upload($pictureFile))
+                    ->setTricks($tricks);
+            }
+            $manager->persist($picture);
+            $manager->flush();
+            $this->addFlash(
+                'success',
+                "New picture added!"
+            );
+            return $this->redirectToRoute('edit_trick',[
+                'id'=> $picture->getTricks()->getId(),
+            ]);
+        }
+        return $this->render('media/editPicture.html.twig',[
+            'form'=> $form->createView(),
+            'trick'=>$request->get('tricks')
+        ]);
+    }
+
+    /**
      * Edit a picture object
      *
-     * @Route ("/picture/edit/{id}/{tricks}", name="edit_picture")
+     * @Route ("/picture/edit/{tricks}/{id?}", name="edit_picture")
      *
      * @param Trick $tricks
      * @param Picture $picture
      * @param Request $request
      * @param ObjectManager $manager
+     * @param FileUploader $fileUploader
+     *
      * @return Response
      */
-    public function editPicture (Picture $picture, Request $request, Trick $tricks, ObjectManager $manager) :Response
+    public function editPicture (Picture $picture, Request $request, Trick $tricks, ObjectManager $manager,FileUploader $fileUploader) :Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $form=$this->createForm(PictureType::class, $picture);
@@ -36,14 +78,8 @@ class MediaController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()){
                 $pictureFile = $picture->getFile();
             if( $pictureFile != null){
-                $pictureName = md5(uniqid()).'.'.$pictureFile->guessExtension();
-                //save it into public/uploads/tricks
-                $pictureFile->move(
-                    $this->getParameter('pictures_directory').'/tricks',
-                    $pictureName
-                );
-                $picture->setTricks($tricks);
-                $picture->setFileName($pictureName);
+                $picture    ->setFileName($fileUploader->upload($pictureFile))
+                            ->setTricks($tricks);
             }
             $manager->persist($picture);
             $manager->flush();
@@ -89,6 +125,43 @@ class MediaController extends AbstractController
     }
 
     /**
+     * @Route ("/picture/addVideo/{tricks}", name="new_video")
+     * @param Request $request
+     * @param Trick $tricks
+     * @param ObjectManager $manager
+     * @return Response
+     */
+    public function addVideo (Request $request, Trick $tricks, ObjectManager $manager): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $video=new Video();
+        $form=$this->createForm(VideoType::class, $video);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()){
+            $video->setTricks($tricks);
+
+            $manager->persist($video);
+            $manager->flush();
+
+            $this->addFlash(
+                'success',
+                "Video added!"
+            );
+
+            return $this->redirectToRoute('edit_trick',[
+                'id'=> $video->getTricks()->getId(),
+            ]);
+        }
+
+        return $this->render('media/editVideo.html.twig',[
+            'form'=> $form->createView(),
+            'trick'=>$request->get('tricks')
+        ]);
+    }
+
+
+    /**
      * Edit a video object
      *
      * @Route ("/video/edit/{id}/{tricks}", name="edit_video")
@@ -124,7 +197,7 @@ class MediaController extends AbstractController
 
         return $this->render('media/editVideo.html.twig',[
             'form'=> $form->createView(),
-            'picture'=> $video,
+            'video'=> $video,
             'trick'=>$request->get('tricks')
         ]);
     }
