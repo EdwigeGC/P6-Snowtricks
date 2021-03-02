@@ -21,6 +21,8 @@ class SecurityController extends AbstractController
      * Displays login form and provides access to user's account
      * 
      * @Route("/login", name="user_login")
+     *
+     * @param AuthenticationUtils $authenticationUtils
      * 
      * @return Response
      */

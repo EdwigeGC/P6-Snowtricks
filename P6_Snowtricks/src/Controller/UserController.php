@@ -26,7 +26,7 @@ use App\Service\Mail;
 class UserController extends AbstractController
 {
     /**
-     * Creates 
+     * Creates user
      * 
      * @Route("/registration", name="user_registration")
      *
@@ -72,7 +72,9 @@ class UserController extends AbstractController
     }
 
    /**
-    * Validates registration with email confirmation
+    * Validates user registration with email confirmation
+    *
+    * @Route("/check-registration/{userEmail}/{token}", name="check_registration")
     *
     * @param UserRepository $repository
     * @param string $userEmail
@@ -80,8 +82,6 @@ class UserController extends AbstractController
     * @param ObjectManager $manager
     *
     * @return Response
-    *
-    * @Route("/check-registration/{userEmail}/{token}", name="check_registration")
     */
     public function checkRegistration(UserRepository $repository, string $userEmail, string $token, ObjectManager $manager):Response
     {
@@ -105,6 +105,7 @@ class UserController extends AbstractController
      * Provides the form to change information on user's account
      *
      * @Route ("account/profile", name="account_profile")
+     *
      * @param Request $request
      * @param ObjectManager $manager
      * @param FileUploader $fileUploader
