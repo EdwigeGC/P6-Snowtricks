@@ -18,6 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class MediaController extends AbstractController
 {
     /**
+     * Provides form to add a picture to a trick in the trick edit form
      * @Route ("/picture/addPicture/{tricks}", name="new_picture")
      *
      * @param Request $request
@@ -57,7 +58,7 @@ class MediaController extends AbstractController
     }
 
     /**
-     * Edit a picture object
+     * Provides form to edit a picture in the trick edit form
      *
      * @Route ("/picture/edit/{tricks}/{id?}", name="edit_picture")
      *
@@ -125,6 +126,7 @@ class MediaController extends AbstractController
     }
 
     /**
+     * Provides form to add a video to a trick in the trick edit form
      * @Route ("/picture/addVideo/{tricks}", name="new_video")
      * @param Request $request
      * @param Trick $tricks
@@ -162,7 +164,7 @@ class MediaController extends AbstractController
 
 
     /**
-     * Edit a video object
+     * Provides form to edit a video in the trick edit form
      *
      * @Route ("/video/edit/{id}/{tricks}", name="edit_video")
      *

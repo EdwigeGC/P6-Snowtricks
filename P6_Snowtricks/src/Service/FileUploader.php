@@ -8,8 +8,16 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 
 
+/**
+ * Supports downloaded files
+ *
+ * @author Edwige Genty
+ */
 class FileUploader
 {
+    /**
+     * @var $targetDirectory provides path for uploading downloaded files
+     */
     private $targetDirectory;
 
     public function __construct($targetDirectory)
@@ -18,7 +26,7 @@ class FileUploader
     }
 
     /**
-     * Rename file uploaded and move them in Picture_Directory
+     * Rename file uploaded and move them in the good picture directory
      *
      * @param UploadedFile $file
      *
@@ -37,6 +45,11 @@ class FileUploader
         return $fileName;
     }
 
+    /**
+     * Provides path to store uploaded files. Configured in config/service.yaml
+     *
+     * @return provides
+     */
     public function getTargetDirectory()
     {
         return $this->targetDirectory;

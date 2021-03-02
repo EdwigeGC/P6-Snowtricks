@@ -26,8 +26,13 @@ class TricksController extends AbstractController
     /**
      * Display home page of the website.
      *
+     * @param int $page
+     * @param Paginator $paginator
+     *
      * @Route("/home/{page<\d+>?1}", name="home")
      * @Route("/{page<\d+>?1}")
+     *
+     * @return Response
      */
     public function home(int $page, Paginator $paginator): Response
     {
@@ -41,11 +46,18 @@ class TricksController extends AbstractController
     }
 
     /**
-     * * Display one trick's details.
+     * Display one trick's details.
      *
      * @Route("/trick/details/{id}/{page<\d+>?1}", name="trick_details")
      *
      * @param $id
+     * @param TrickRepository $repository
+     * @param Request $request
+     * @param ObjectManager $manager
+     * @param Paginator $paginator
+     * @param int $page
+     *
+     * @return Response
      */
     public function trickDetails($id, TrickRepository $repository, Request $request, ObjectManager $manager, Paginator $paginator, int $page): Response
     {
@@ -92,6 +104,11 @@ class TricksController extends AbstractController
      * Creates a new snowboard trick. It uses "upload" function from App\Service\FileUploader to rename file uploaded and move them in Picture_Directory.
      *
      * @Route("/trick/new", name="add_trick")
+     *
+     * @param Request $request
+     * @param FileUploader $fileUploader
+     * @param ObjectManager $manager
+     * @return Response
      */
     public function create(Request $request, FileUploader $fileUploader, ObjectManager $manager): Response
     {
@@ -140,6 +157,10 @@ class TricksController extends AbstractController
      * Delete a trick from the database.
      *
      * @Route("/trick/delete/{id}", name="delete_trick")
+     *
+     * @param Trick $trick
+     * @param ObjectManager $manager
+     * @return Response
      */
     public function delete(Trick $trick, ObjectManager $manager): Response
     {
@@ -154,7 +175,7 @@ class TricksController extends AbstractController
         );
 
         return $this->redirectToRoute('home');
-    }
+        }
     else{
         $this->addFlash(
             'danger',
@@ -162,13 +183,18 @@ class TricksController extends AbstractController
         );
 
         return $this->redirectToRoute('home');
-    }
+        }
     }
 
     /**
      * Display form to edit a trick.
      *
      * @Route ("/edit/trick/{id}", name="edit_trick")
+     *
+     * @param Trick $trick
+     * @param Request $request
+     * @param ObjectManager $manager
+     * @return Response
      */
     public function edit(Trick $trick, Request $request, ObjectManager $manager): Response
     {
@@ -200,7 +226,6 @@ class TricksController extends AbstractController
             'trick'=> $trick
         ]);
         }
-
         else{
             $this->addFlash(
                 'danger',
