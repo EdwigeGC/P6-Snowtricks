@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdocumentor configVersion="3.0">
+    <paths>
+        <output>documentation</output>
+    </paths>
+    <version number="1.0">
+        <api format="php">
+            <ignore hidden="true" symlinks="false">
+                <path>./vendor/*</path>
+                <path>./var/*</path>
+            </ignore>
+        </api>
+    </version>
+</phpdocumentor>

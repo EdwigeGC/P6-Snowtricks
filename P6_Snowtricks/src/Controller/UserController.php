@@ -136,7 +136,7 @@ class UserController extends AbstractController
                 "The information is now updated"
             );
 
-            return $this->redirectToRoute('home');
+            return $this->redirectToRoute('account_profile');
         }
 
         return $this->render('user/profile.html.twig',[

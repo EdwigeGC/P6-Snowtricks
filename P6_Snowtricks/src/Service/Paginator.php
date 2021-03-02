@@ -4,10 +4,10 @@ namespace App\Service;
 
 use Doctrine\Persistence\ObjectManager;
 
-
-class Paginator{
+class Paginator
+{
     private $entityClass;
-    private $limit =10;
+    private $limit = 10;
     private $page = 1;
     private $manager;
     private $orderBy =[];
@@ -20,9 +20,9 @@ class Paginator{
 
     public function getPages()
     {
-        $repository= $this->manager->getRepository($this->entityClass);
-        $total =count($repository->findAll());
-        $pages= ceil($total/$this->limit);
+        $repository = $this->manager->getRepository($this->entityClass);
+        $total = count($repository->findAll());
+        $pages = ceil($total / $this->limit);
 
         return $pages;
     }
@@ -33,7 +33,7 @@ class Paginator{
         $repository =$this->manager->getRepository($this->entityClass);
         $data = $repository->findBy($this->filterBy,$this->orderBy, $this->limit, $offset);
 
-    return $data;
+        return $data;
     }
 
     public function setEntityClass($entityClass)
@@ -48,7 +48,8 @@ class Paginator{
         return $this->entityClass;
     }
 
-    public function setLimit($limit){
+    public function setLimit($limit)
+    {
         $this->limit = $limit;
 
         return $this;
@@ -62,6 +63,7 @@ class Paginator{
     public function setPage($page)
     {
         $this->page = $page;
+
         return $this;
     }
 
@@ -73,6 +75,7 @@ class Paginator{
     public function setOrderBy($orderBy)
     {
         $this->orderBy = $orderBy;
+
         return $this;
     }
 
@@ -81,6 +84,5 @@ class Paginator{
         $this->filterBy = $filterBy;
         return $this;
     }
-
 
 }
