@@ -6,10 +6,10 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -40,7 +40,7 @@ class User implements UserInterface
     private $lastName;
 
     /**
-      * @var string|null
+     * @var string|null
      * @ORM\Column(type="string", length=45, nullable=true)
      * @Assert\Length(min=2, max=100)
      */
@@ -73,7 +73,7 @@ class User implements UserInterface
     private $photo;
 
     /**
-    * @var bool
+     * @var bool
      * @ORM\Column(type="boolean", length=255)
      */
     private $validated;
@@ -105,7 +105,6 @@ class User implements UserInterface
      * @var string|null
      */
     private $salt;
-
 
     public function __construct()
     {
@@ -147,7 +146,8 @@ class User implements UserInterface
      *
      * @return string The username
      */
-    public function getUsername(){
+    public function getUsername()
+    {
         return $this->username;
     }
 
@@ -268,7 +268,7 @@ class User implements UserInterface
 
     /**
      * Returns the roles granted to the user.
-    
+
      * Alternatively, the roles might be stored on a ``roles`` property,
      * and populated in any number of different ways when the user object
      * is created.
@@ -287,8 +287,8 @@ class User implements UserInterface
      *
      * @return string|null The salt
      */
-    public function getSalt(){
-
+    public function getSalt()
+    {
     }
 
     /**
@@ -297,10 +297,12 @@ class User implements UserInterface
      * This is important if, at any given point, sensitive information like
      * the plain-text password is stored on this object.
      */
-    public function eraseCredentials(){
+    public function eraseCredentials()
+    {
     }
 
-    public function getApiToken(): ?string{
+    public function getApiToken(): ?string
+    {
         return $this->apiToken;
     }
 
@@ -311,20 +313,18 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getFile() {
+    public function getFile()
+    {
         return $this->file;
     }
 
     /**
-     * @param UploadedFile|null $file
      * @return $this|null
      */
-    public function setFile(UploadedFile $file=null): ?self
+    public function setFile(UploadedFile $file = null): ?self
     {
         $this->file = $file;
 
         return $this;
     }
-
 }
-
