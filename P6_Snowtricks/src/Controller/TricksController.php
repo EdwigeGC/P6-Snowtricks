@@ -199,7 +199,7 @@ class TricksController extends AbstractController
     public function edit(Trick $trick, Request $request, ObjectManager $manager): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        if(!$this->isGranted('POST_EDIT', $trick)){
+        if($this->isGranted('POST_EDIT', $trick)){
             $form=$this->createForm(EditTrickType::class, $trick);
             $form->handleRequest($request);
 
@@ -230,6 +230,5 @@ class TricksController extends AbstractController
             );
             return $this->redirectToRoute('home');
         }
-
     }
 }

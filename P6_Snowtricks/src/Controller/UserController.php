@@ -162,7 +162,6 @@ class UserController extends AbstractController
      */
     public function resetPassword(Request $request, UserRepository $repository, string $userEmail, string $token, UserPasswordEncoderInterface $encoder, ObjectManager $manager)
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $user = $repository->findOneBy(['email' => $userEmail]);
         if ($token != null && $token === $user->getApiToken()) {
 
