@@ -29,8 +29,11 @@
 
         <div class="album py-5 bg-light">
             <div class="container">
+                <button class="btn action-button btn-lg mx-auto mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#medias" aria-controls="medias" aria-expanded="false">
+                    <i class="far fa-eye"></i> See medias
+                </button>
                 <h2>Media</h2>
-                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3" id="medias">
                     {% for picture in trick.pictures %}
                     <div class="col">
                         <div class="card shadow-sm mx-3 mb-3">
@@ -50,14 +53,16 @@
                                 <a href="{{ path('edit_video', {'id': video.id, 'tricks': trick.id}) }}" class="btn btn-primary" ><i class="fas fa-pencil-alt"></i></a>
                                 <a href="{{ path('delete_video', {'id': video.id}) }}" class="btn btn-danger" onclick="return confirm('Do you really want to delete this trick?')"><i class="fas fa-trash-alt"></i></a>
                             </div>
+                        </div>
+                    </div>
                     {% endfor %}
+                    <div class="col-lg-2 d-flex flex-column py-3 justify-content-md-center">
+                        <a href="{{ path('new_picture', {'tricks':trick.id}) }}" class="btn action-button mb-3"><i class="fas fa-plus-square"> Add a picture</i></a>
+                        <a href="{{ path('new_video', {'tricks':trick.id}) }}" class="btn action-button"><i class="fas fa-plus-square"> Add a video</i></a>
+                    </div>
                 </div>
             </div>
         </div>
-            <div class="col-lg-2 d-flex flex-column py-3 justify-content-md-center">
-                <a href="{{ path('new_picture', {'tricks':trick.id}) }}" class="btn action-button mb-3"><i class="fas fa-plus-square"> Add a picture</i></a>
-                <a href="{{ path('new_video', {'tricks':trick.id}) }}" class="btn action-button"><i class="fas fa-plus-square"> Add a video</i></a>
-            </div>
     </section>
 
 
