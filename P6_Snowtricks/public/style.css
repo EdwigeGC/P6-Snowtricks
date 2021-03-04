@@ -45,7 +45,11 @@
     height:50px;
 }
 
-/* tricks list style */
+/*main banner style*/
+.arrow{
+    color: #4093aa;
+    font-size: 50px;
+}
 .main-title{
     color:#22252a;
     font-family: "Permanent_Marker", Arial, Helvetica, sans-serif;
@@ -59,9 +63,10 @@
 .main-banner {
     background-image: url("images/main-picture-snowtricks.png");
     background-size: cover;
-    min-height: 800px;
+    min-height: 700px;
 }
 
+/* tricks list style */
 .tricks img {
     height: 200px;
 }
@@ -98,7 +103,7 @@
 
 .album card {
     width: 450px;
-    height:250px;
+    height: 250px;
 }
 
 /*trick's description style*/
@@ -106,9 +111,8 @@
     text-align: justify;
 }
 
-/* comment style */
+/*user element style*/
 .profile img {
-    width: 80px;
-    height:auto;
-    border-radius: 50%;
+    clip-path: circle(40%);
+    width: 200px;
 }

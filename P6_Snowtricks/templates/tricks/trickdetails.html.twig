@@ -32,8 +32,10 @@
 
         <div class="album py-5 bg-light">
             <div class="container">
-
-                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3">
+                <button class="btn action-button btn-lg mx-auto mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#medias" aria-controls="medias" aria-expanded="false">
+                    <i class="far fa-eye"></i> See medias
+                </button>
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3 collapse" id="medias">
                     {% for picture in trick.pictures %}
                             <img src="{{ asset('uploads/'~ picture.fileName)}}" class="img-thumbnail trick-thumbnail" alt="{{ picture.title }}">
                     {% endfor %}

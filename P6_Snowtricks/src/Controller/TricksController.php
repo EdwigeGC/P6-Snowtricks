@@ -66,6 +66,7 @@ class TricksController extends AbstractController
         //displays comments
         $paginator->setEntityClass(Comment::class)
                     ->setPage($page)
+                    ->setLimit(5)
                     ->setOrderBy(['creationDate' => 'desc'])
                     ->setFilterBy(['tricks' => $id]);
 
@@ -122,7 +123,7 @@ class TricksController extends AbstractController
             $trick->setCreationDate(new \Datetime())
                     ->setUser($this->getUser());
 
-            //tricks main Picture
+            //trick main Picture
             $mainPictureFile = $trick->getFileMainPicture();
             if (null != $mainPictureFile) {
                 $trick->setMainPicture($fileUploader->upload($mainPictureFile));
@@ -144,7 +145,6 @@ class TricksController extends AbstractController
                 'success',
                 'New trick added !'
             );
-
             return $this->redirectToRoute('home');
         }
 
@@ -166,24 +166,24 @@ class TricksController extends AbstractController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         if($this->isGranted('POST_EDIT', $trick)){
-        $manager->remove($trick);
-        $manager->flush();
+            $manager->remove($trick);
+            $manager->flush();
 
-        $this->addFlash(
-            'success',
-            'Success: the trick is deleted.'
-        );
+            $this->addFlash(
+                'success',
+                'Success: the trick is deleted.'
+            );
 
-        return $this->redirectToRoute('home');
-        }
-    else{
-        $this->addFlash(
-            'danger',
-            "Access denied. You are not the author of this trick."
-        );
+            return $this->redirectToRoute('home');
+            }
+        else{
+            $this->addFlash(
+                'danger',
+                "Access denied. You are not the author of this trick."
+            );
 
-        return $this->redirectToRoute('home');
-        }
+            return $this->redirectToRoute('home');
+            }
     }
 
     /**
@@ -199,13 +199,12 @@ class TricksController extends AbstractController
     public function edit(Trick $trick, Request $request, ObjectManager $manager): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        if($this->isGranted('POST_EDIT', $trick)){
+        if(!$this->isGranted('POST_EDIT', $trick)){
             $form=$this->createForm(EditTrickType::class, $trick);
             $form->handleRequest($request);
 
-            if ($form->isSubmitted() ){
-
-                $trick -> setModificationDate(new\ Datetime);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $trick -> setModificationDate(new \Datetime);
 
                 $manager->persist($trick);
                 $manager->flush();
@@ -214,24 +213,21 @@ class TricksController extends AbstractController
                     'success',
                     "Modifications recorded"
                 );
-
                 return $this->redirectToRoute('trick_details',[
                     'id'=> $trick->getId(),
                     'trick'=>$trick->getPictures()
                 ]);
             }
-
-        return $this->render('tricks/editTrick.html.twig',[
-            'form'=> $form->createView(),
-            'trick'=> $trick
-        ]);
+            return $this->render('tricks/editTrick.html.twig',[
+                'form'=> $form->createView(),
+                'trick'=> $trick
+            ]);
         }
-        else{
+        else {
             $this->addFlash(
                 'danger',
                 "Access denied. You are not the author of this trick."
             );
-
             return $this->redirectToRoute('home');
         }
 

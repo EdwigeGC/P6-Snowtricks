@@ -18,7 +18,7 @@
             <div class="row d-flex justify-content-around">
                 <div class="col-lg-6">
                     {% if user.photo is not null %}
-                        <img src="{{ asset('uploads/'~ user.photo)}}" class="img-thumbnail" alt="profile picture">
+                        <img src="{{ asset('uploads/'~ user.photo)}}" class="img-thumbnail rounded-circle" alt="profile picture">
                     {% endif %}
                 </div>
                 <div class="col-lg-6">

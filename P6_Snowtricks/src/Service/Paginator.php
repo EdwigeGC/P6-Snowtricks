@@ -53,8 +53,7 @@ class Paginator
      */
     public function getPages()
     {
-        $repository = $this->manager->getRepository($this->entityClass);
-        $total = count($repository->findAll());
+        $total = count($this->manager->getRepository($this->entityClass)->findBy($this->filterBy, $this->orderBy));
         $pages = ceil($total / $this->limit);
 
         return $pages;
@@ -67,9 +66,9 @@ class Paginator
      */
     public function getData()
     {
-        $offset= $this->page * $this->limit - $this->limit;
-        $repository =$this->manager->getRepository($this->entityClass);
-        $data = $repository->findBy($this->filterBy,$this->orderBy, $this->limit, $offset);
+        $offset = $this->page * $this->limit - $this->limit;
+        $repository = $this->manager->getRepository($this->entityClass);
+        $data = $repository->findBy($this->filterBy, $this->orderBy, $this->limit, $offset);
 
         return $data;
     }
