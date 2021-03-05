@@ -9,12 +9,19 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\String\Slugger\AsciiSlugger;
+use function Symfony\Component\String\u;
+
 
 /**
  * @ORM\Entity(repositoryClass=TrickRepository::class)
  * @UniqueEntity(
  *      fields={"name"},
  *      message="This trick already exists."
+ * )
+ * @UniqueEntity(
+ *      fields={"slug"},
+ *      message="This slug already exists."
  * )
  */
 class Trick
@@ -30,6 +37,11 @@ class Trick
      * @ORM\Column(type="string", length=255)
      */
     private $name;
+
+    /**
+     * @ORM\Column (type="string", length=255)
+     */
+    private $slug;
 
     /**
      * @ORM\Column(type="text")
@@ -109,6 +121,19 @@ class Trick
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $slugger = new AsciiSlugger();
+        $this->slug = $slugger->slug(u($this->getName())->lower());
 
         return $this;
     }
