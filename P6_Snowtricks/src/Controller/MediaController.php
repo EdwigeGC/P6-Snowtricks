@@ -39,7 +39,7 @@ class MediaController extends AbstractController
             $pictureFile = $picture->getFile();
             if( $pictureFile != null){
                 $picture    ->setFileName($fileUploader->upload($pictureFile))
-                    ->setTricks($tricks);
+                            ->setTricks($tricks);
             }
             $manager->persist($picture);
             $manager->flush();

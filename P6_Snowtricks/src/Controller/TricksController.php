@@ -48,9 +48,9 @@ class TricksController extends AbstractController
     /**
      * Display one trick's details.
      *
-     * @Route("/trick/details/{id}/{page<\d+>?1}", name="trick_details")
+     * @Route("/trick/details/{slug}/{page<\d+>?1}", name="trick_details")
      *
-     * @param $id
+     * @param string $slug
      * @param TrickRepository $repository
      * @param Request $request
      * @param ObjectManager $manager
@@ -59,16 +59,17 @@ class TricksController extends AbstractController
      *
      * @return Response
      */
-    public function trickDetails($id, TrickRepository $repository, Request $request, ObjectManager $manager, Paginator $paginator, int $page): Response
+    public function trickDetails(string $slug, TrickRepository $repository, Request $request, ObjectManager $manager, Paginator $paginator, int $page): Response
     {
-        $trick = $repository->findOneById($id);
-
+        dump($slug);
+        $trick = $repository->findOneBy(['slug' =>$slug]);
+dump($trick);
         //displays comments
         $paginator->setEntityClass(Comment::class)
                     ->setPage($page)
                     ->setLimit(5)
                     ->setOrderBy(['creationDate' => 'desc'])
-                    ->setFilterBy(['tricks' => $id]);
+                    ->setFilterBy(['tricks' => $trick->getId()]);
 
         //creates form to write and save a comment
         $comment = new Comment();
@@ -90,7 +91,7 @@ class TricksController extends AbstractController
             );
 
             return $this->redirectToRoute('trick_details', [
-                'id' => $trick->getId(),
+                'slug' => $trick->getSlug(),
                 ]);
         }
 
@@ -120,8 +121,9 @@ class TricksController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $trick->setCreationDate(new \Datetime())
-                    ->setUser($this->getUser());
+            $trick  ->setCreationDate(new \Datetime())
+                    ->setUser($this->getUser())
+                    ->setSlug($trick->getName());
 
             //trick main Picture
             $mainPictureFile = $trick->getFileMainPicture();
@@ -204,7 +206,8 @@ class TricksController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $trick -> setModificationDate(new \Datetime);
+                $trick  -> setModificationDate(new \Datetime)
+                        ->setSlug($trick->getName());
 
                 $manager->persist($trick);
                 $manager->flush();
@@ -214,7 +217,7 @@ class TricksController extends AbstractController
                     "Modifications recorded"
                 );
                 return $this->redirectToRoute('trick_details',[
-                    'id'=> $trick->getId(),
+                    'slug'=> $trick->getSlug(),
                     'trick'=>$trick->getPictures()
                 ]);
             }

@@ -7,7 +7,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb px-3 py-3">
             <li class="breadcrumb-item"><a href="{{ path('home') }}">Home</a></li>
-            <li class="breadcrumb-item"><a href="{{ path('trick_details', {'id': trick.id}) }}" onclick="return confirm('The modifications won\'t be saved, are you sure to leave this page?')">{{ trick.name }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ path('trick_details', {'slug': trick.slug}) }}" onclick="return confirm('The modifications won\'t be saved, are you sure to leave this page?')">{{ trick.name }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">Edit</li>
         </ol>
     </nav>
